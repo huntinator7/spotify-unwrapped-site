@@ -7,6 +7,6 @@ import SpotifyWebApiServer from "spotify-web-api-node/src/server-methods";
 )._addMethods(SpotifyWebApiServer);
 
 export const spotifyApi = new SpotifyWebApi({
-  redirectUri: "http://localhost:5173/callback",
+  redirectUri: "https://spotify-unwrapped-huntinator7.web.app/callback",
   clientId: "b777b1eb8ed24764b9d96adc9261beca",
 });
