@@ -6,3 +6,11 @@ export const firebaseConfig = {
   messagingSenderId: "697152284245",
   appId: "1:697152284245:web:e5a03c35787ed0311356dc",
 };
+
+export const allowedDomains = [
+  "http://localhost:5173",
+  "https://spotify-unwrapped-huntinator7.web.app",
+  "https://spotify-unwrapped-huntinator7.firebaseapp.com",
+  "https://unwrapp.app",
+  "https://www.unwrapp.app",
+];
