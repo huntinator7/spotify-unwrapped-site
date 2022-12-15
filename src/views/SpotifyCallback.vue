@@ -7,6 +7,7 @@ import { useRoute } from "vue-router";
 import { doc, updateDoc } from "firebase/firestore";
 import { useFirestore, useCurrentUser } from "vuefire";
 import { onMounted } from "vue";
+import { redirectUri } from "@/spotify";
 
 const user = useCurrentUser();
 const db = useFirestore();
@@ -20,6 +21,7 @@ onMounted(async () => {
 
     await updateDoc(userRef, {
       auth_code: route.query.code,
+      redirect_uri: redirectUri,
     });
   }
 });

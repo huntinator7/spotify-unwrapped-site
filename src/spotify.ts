@@ -7,7 +7,7 @@ import { allowedDomains } from "./config";
   SpotifyWebApi as unknown as { _addMethods: (fncs: unknown) => void }
 )._addMethods(SpotifyWebApiServer);
 
-const redirectUri = allowedDomains.includes(window.location.origin)
+export const redirectUri = allowedDomains.includes(window.location.origin)
   ? `${window.location.origin}/callback`
   : "none";
 
