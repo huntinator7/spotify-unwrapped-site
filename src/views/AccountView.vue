@@ -7,9 +7,6 @@
       <button class="button danger" @click="deleteAccount">
         Delete Account
       </button>
-      <button class="button primary" @click="listenManual">
-        Listen Manual
-      </button>
     </div>
   </main>
 </template>
@@ -25,12 +22,6 @@ const auth = getAuth();
 
 function deleteAccount() {
   window.alert("you won't");
-}
-
-function listenManual() {
-  fetch(
-    "https://us-central1-spotify-unwrapped-huntinator7.cloudfunctions.net/getListensManual"
-  );
 }
 </script>
 
