@@ -13,6 +13,7 @@
     <span>Loading...</span>
   </main>
   <main v-else-if="playsWithStats.length" class="content">
+    <div>Last Updated at {{ userLastUpdated }}</div>
     <div class="playlist">
       <div class="sticky">
         <div class="track ul">
@@ -34,7 +35,13 @@
       </div>
     </div>
   </main>
-  <main v-else class="content">No Listens</main>
+  <main v-else class="content">
+    <div>No Listens</div>
+    <div>
+      If you just linked your account, it will take approximately 2 minutes to
+      get your last few days of listens
+    </div>
+  </main>
 </template>
 
 <script setup lang="ts">
@@ -56,6 +63,7 @@ const playStore = usePlayStore();
 const { playsWithStats } = storeToRefs(playStore);
 
 const userInfo: Ref<User | null> = ref(null);
+const userLastUpdated: Ref<string | null> = ref(null);
 
 onMounted(async () => {
   await playStore.getPlays();
@@ -68,6 +76,12 @@ watch(user, async () => {
   if (user.value) {
     userInfo.value = await getUserInfo(user);
     await playStore.getPlays();
+  }
+});
+
+watch(userInfo, (newVal) => {
+  if (newVal?.last_updated) {
+    userLastUpdated.value = new Date(newVal.last_updated).toLocaleString();
   }
 });
 
