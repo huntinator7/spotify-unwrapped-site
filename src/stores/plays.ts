@@ -5,21 +5,22 @@ import { collection, getDocs } from "firebase/firestore";
 import { useCurrentUser, useFirestore } from "vuefire";
 
 export const usePlayStore = defineStore("plays", () => {
-  const plays: Ref<Track[]> = ref([]);
+  const plays: Ref<Track[] | null> = ref(null);
 
-  const playsWithStats: ComputedRef<Track[]> = computed(() =>
-    plays.value
-      .map((d) => ({
-        ...d,
-        stats: {
-          playedAtFormatted: `${new Date(
-            d.played_at
-          ).toLocaleDateString()} ${new Date(
-            d.played_at
-          ).toLocaleTimeString()}`,
-        },
-      }))
-      ?.sort((t1, t2) => (t1.played_at > t2.played_at ? -1 : 1))
+  const playsWithStats: ComputedRef<Track[] | null> = computed(
+    () =>
+      plays.value
+        ?.map((d) => ({
+          ...d,
+          stats: {
+            playedAtFormatted: `${new Date(
+              d.played_at
+            ).toLocaleDateString()} ${new Date(
+              d.played_at
+            ).toLocaleTimeString()}`,
+          },
+        }))
+        ?.sort((t1, t2) => (t1.played_at > t2.played_at ? -1 : 1)) ?? null
   );
 
   async function getPlaysInternal() {
@@ -35,7 +36,7 @@ export const usePlayStore = defineStore("plays", () => {
   }
 
   async function getPlays() {
-    if (plays.value.length) {
+    if (plays.value) {
       return;
     } else {
       getPlaysInternal();

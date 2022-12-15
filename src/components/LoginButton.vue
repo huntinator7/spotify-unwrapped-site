@@ -1,5 +1,7 @@
 <template>
-  <button v-if="!user" class="button" @click="signIn">Login with Google</button>
+  <button v-if="!user" class="button primary" @click="signIn">
+    Login with Google
+  </button>
   <span v-else class="logged"
     >Logged in as {{ user?.providerData[0]?.email }}</span
   >

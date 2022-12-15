@@ -6,33 +6,18 @@
   margin: 0;
   padding: 0;
   overflow-y: hidden;
-  font-weight: normal;
-}
-
-a,
-.green,
-.button {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-}
-
-@media (hover: hover) {
-  a:hover {
-    background-color: rgba(0, 189, 126, 0.2);
-  }
-
-  .button:hover {
-    background-color: hsl(240, 69%, 28%);
-    cursor: pointer;
-  }
-}
-
-body #app {
   display: flex;
   flex-direction: row;
 }
 
+a {
+  text-decoration: none;
+}
+
+a:hover,
+.button:hover {
+  cursor: pointer;
+}
 @media (max-width: 1024px) {
   .v-sidebar-menu.vsm_collapsed {
     left: -20px;
@@ -43,8 +28,6 @@ body #app {
   display: flex;
   align-items: flex-start;
   text-align: center;
-  background-color: #181831;
-  color: white;
   border-radius: 8px;
   padding: 10px 20px;
   border: 1px solid white;
@@ -61,9 +44,84 @@ body #app {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.button:hover {
+  cursor: pointer;
+  padding: 8px 18px;
+  border: 3px solid;
+}
+
+.button {
+  background-color: white;
+  color: #191414;
+}
+
+.button:hover {
+  background-color: #191414;
+  color: white;
+  border-color: white;
+}
+
+.button:active {
+  background-color: white;
+  color: white;
+  border-color: white;
+}
+
+.button.danger {
+  background-color: #f53232;
+  color: #191414;
+}
+
+.button.danger:hover {
+  background-color: #191414;
+  color: #f53232;
+  border-color: #f53232;
+}
+
+.button.danger:active {
+  background-color: #f53232;
+  color: #f53232;
+  border-color: #f53232;
+}
+
+.button.primary {
+  background-color: #1ed760;
+  color: #191414;
+}
+
+.button.primary:hover {
+  background-color: #191414;
+  color: #1ed760;
+  border-color: #1ed760;
+}
+
+.button.primary:active {
+  background-color: #1ed760;
+  color: #1ed760;
+  border-color: #1ed760;
+}
+
+.button.secondary {
+  background-color: #191414;
+  color: white;
+}
+
+.button.secondary:hover {
+  background-color: white;
+  color: #191414;
+  border-color: #191414;
+}
+
+.button.secondary:active {
+  background-color: #191414;
+  color: #191414;
+  border-color: #191414;
+}
+
 h1 {
   margin-bottom: 8px;
   text-align: center;
+  font-weight: normal;
 }
 
 main {
@@ -77,7 +135,7 @@ main {
 .content {
   background-color: var(--color-background);
   padding: 1rem;
-  height: 100vh;
+  height: calc(100vh - 3.5em);
 }
 
 ::-webkit-scrollbar {
@@ -93,8 +151,15 @@ main {
   outline: 1px solid slategrey;
 }
 
+@media (max-width: 1024px) {
+  ::-webkit-scrollbar {
+    width: 0em;
+  }
+}
+
 * {
   scrollbar-color: black darkgrey;
+  scrollbar-width: 1em;
 }
 
 .v-sidebar-menu .vsm--link_level-1 .vsm--icon {
@@ -120,4 +185,34 @@ main {
 .v-sidebar-menu.vsm_expanded .vsm--link_level-1.vsm--link_open {
   background-color: #1ed760;
   color: #191414;
+}
+
+.fab {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  height: 65px;
+  width: 65px;
+  border-radius: 65px;
+  background-color: #1ed760;
+  color: #191414;
+  border: 3px solid #191414;
+}
+
+.fab i {
+  font-size: 2rem;
+}
+
+.fab:hover {
+  cursor: pointer;
+  background-color: #191414;
+  color: #1ed760;
+  border: 3px solid #1ed760;
+}
+
+.fab:active {
+  cursor: pointer;
+  background-color: #1ed760;
+  color: #1ed760;
+  border: 3px solid #1ed760;
 }

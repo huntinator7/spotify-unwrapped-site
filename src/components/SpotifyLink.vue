@@ -1,5 +1,5 @@
 <template>
-  <a class="button" :href="authorizeURL">
+  <a class="button primary" :href="authorizeURL">
     Click to authorize Unwrapped to access your Spotify
   </a>
 </template>

@@ -3,21 +3,31 @@
   <main v-if="!user" class="content">
     <Login />
   </main>
+  <main v-else-if="!userInfo" class="content">
+    <span>Loading...</span>
+  </main>
   <main v-else-if="!userInfo?.refresh_token" class="content">
     <SpotifyLink />
   </main>
+  <main v-else-if="!playsWithStats" class="content">
+    <span>Loading...</span>
+  </main>
   <main v-else-if="playsWithStats.length" class="content">
-    <div class="sticky">
-      <div class="track ul">
-        <span></span>
-        <span>Title</span>
-        <span>Artist</span>
-        <span>Played At</span>
-      </div>
-    </div>
     <div class="playlist">
+      <div class="sticky">
+        <div class="track ul">
+          <span></span>
+          <span>Title</span>
+          <span>Artist</span>
+          <span>Played At</span>
+        </div>
+      </div>
       <div v-for="play in playsWithStats" :key="play.id" class="track">
-        <img :src="play.track.album.images[2].url" height="64" width="64" />
+        <img
+          :src="play.track.album.images[2].url"
+          :height="imgHeight"
+          :width="imgHeight"
+        />
         <span>{{ play.track.name }}</span>
         <span>{{ play.track.artists[0].name }}</span>
         <span>{{ play.stats.playedAtFormatted }}</span>
@@ -28,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, ref, watch, type Ref } from "vue";
 import { storeToRefs } from "pinia";
 
 import { usePlayStore } from "@/stores/plays";
@@ -36,19 +46,32 @@ import Login from "@/components/LoginButton.vue";
 import SpotifyLink from "@/components/SpotifyLink.vue";
 import { getUserInfo } from "@/scripts/firebase";
 import { useCurrentUser } from "vuefire";
+import { useMedia } from "@/scripts/media";
+import { computed } from "vue";
+import type { User } from "@/types";
 
+const isMobile = useMedia("(max-width: 1024px)");
 const user = useCurrentUser();
 const playStore = usePlayStore();
 const { playsWithStats } = storeToRefs(playStore);
 
-const userInfo = await getUserInfo(user);
+const userInfo: Ref<User | null> = ref(null);
 
 onMounted(async () => {
   await playStore.getPlays();
-  console.log(playsWithStats);
+  if (user.value) {
+    userInfo.value = await getUserInfo(user);
+  }
 });
 
-console.log(playsWithStats);
+watch(user, async () => {
+  if (user.value) {
+    userInfo.value = await getUserInfo(user);
+    await playStore.getPlays();
+  }
+});
+
+const imgHeight = computed(() => (isMobile.value ? "32" : "64"));
 </script>
 
 <style lang="scss" scoped>
@@ -66,6 +89,7 @@ console.log(playsWithStats);
 .track span {
   font-size: 1.2rem;
   padding-left: 1rem;
+  text-align: left;
 }
 
 .playlist {
@@ -83,5 +107,15 @@ console.log(playsWithStats);
 
 .ul {
   border-bottom: 1px solid #ffffff30;
+}
+
+@media (max-width: 1024px) {
+  .track {
+    grid-template-columns: 32px 30vw 1fr 30vw;
+  }
+
+  .track span {
+    font-size: 1rem;
+  }
 }
 </style>
