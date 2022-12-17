@@ -1,6 +1,6 @@
 export type Track = SpotifyApi.PlayHistoryObject & {
   id: string;
-  stats: Record<string, string>;
+  stats: Stats;
 };
 
 export type User = {
@@ -13,3 +13,7 @@ export type User = {
   auth_code: string;
   spotify_state: string;
 };
+
+interface Stats {
+  playedAtFormatted: string;
+}
