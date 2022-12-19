@@ -41,7 +41,6 @@ watch(userInfo, (newVal) => {
   display: flex;
   justify-content: center;
   a {
-    padding: 1rem;
     font-size: 1.2rem;
     margin: 0rem 1rem;
   }
