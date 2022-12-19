@@ -1,13 +1,15 @@
 <template>
   <sidebar-menu
+    :ref="sidebarRef"
     :menu="menu"
     :collapsed="collapsed"
     :relative="!isMobile"
     :hideToggle="isMobile"
     :width-collapsed="isMobile ? '0px' : '65px'"
+    @update:collapsed="hasCollapsed"
     @item-click="onItemClick"
   />
-  <div class="main">
+  <div class="main" :style="mainStyle">
     <Suspense>
       <template #default>
         <RouterView></RouterView>
@@ -30,6 +32,15 @@ import { useMedia } from "@/scripts/media";
 const isMobile = useMedia("(max-width: 1024px)");
 
 const collapsed = ref(true);
+const sidebarRef = ref(null);
+
+const mainStyle = computed(() => ({
+  "--width": isMobile.value
+    ? "100vw"
+    : collapsed.value
+    ? "calc(100vw - 65px)"
+    : "calc(100vw - 290px)",
+}));
 
 const menu: ComputedRef<any[]> = computed(() => [
   {
@@ -53,15 +64,23 @@ const menu: ComputedRef<any[]> = computed(() => [
     icon: "fas fa-user",
   },
 ]);
+
 function onItemClick() {
   if (isMobile) {
     collapsed.value = true;
   }
+}
+
+function hasCollapsed(c: boolean) {
+  collapsed.value = c;
 }
 </script>
 
 <style scoped lang="scss">
 .main {
   width: 100vw;
+  max-width: var(--width);
+  -webkit-transition: max-width 0.3s ease;
+  transition: max-width 0.3s ease;
 }
 </style>

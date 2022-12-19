@@ -10,9 +10,15 @@ import {
   QueryDocumentSnapshot,
   startAfter,
 } from "firebase/firestore";
-import { useCurrentUser, useFirestore } from "vuefire";
+import { useFirestore } from "vuefire";
+
+import { useUserStore } from "@/stores/user";
+import { storeToRefs } from "pinia";
 
 export const usePlayStore = defineStore("plays", () => {
+  const userStore = useUserStore();
+  const { user } = storeToRefs(userStore);
+
   const plays: Ref<QueryDocumentSnapshot<Play>[] | null> = ref(null);
 
   const playsWithStats: ComputedRef<Play[] | null> = computed(
@@ -32,7 +38,6 @@ export const usePlayStore = defineStore("plays", () => {
 
   async function getPlaysInternal() {
     const db = useFirestore();
-    const user = useCurrentUser();
 
     if (user.value) {
       console.log("getting plays");

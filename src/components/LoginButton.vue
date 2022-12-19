@@ -3,19 +3,22 @@
     Login with Google
   </button>
   <span v-else class="logged"
-    >Logged in as {{ user?.providerData[0]?.email }}</span
+    >Logged in as {{ user?.providerData?.[0]?.email }}</span
   >
 </template>
 
 <script setup lang="ts">
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { useCurrentUser } from "vuefire";
+
+import { useUserStore } from "@/stores/user";
+import { storeToRefs } from "pinia";
+const userStore = useUserStore();
+const { user } = storeToRefs(userStore);
 
 const provider = new GoogleAuthProvider();
 provider.addScope("https://www.googleapis.com/auth/contacts.readonly");
 
 const auth = getAuth();
-const user = useCurrentUser();
 
 function signIn() {
   signInWithPopup(auth, provider);

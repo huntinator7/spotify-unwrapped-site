@@ -113,15 +113,6 @@ onMounted(() => {
   border-bottom: 1px solid #ffffff30;
 }
 
-.fullwidth {
-  width: -webkit-fill-available;
-  width: -moz-available;
-  margin-right: 2rem;
-  font-size: 2em;
-  margin-bottom: 1rem;
-  justify-content: center;
-}
-
 @media (max-width: 1024px) {
   .track {
     grid-template-columns: 32px 30vw 1fr 30vw;

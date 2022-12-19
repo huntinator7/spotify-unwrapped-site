@@ -11,12 +11,16 @@
 <script setup lang="ts">
 import { useRoute } from "vue-router";
 import { doc, updateDoc } from "firebase/firestore";
-import { useFirestore, useCurrentUser } from "vuefire";
+import { useFirestore } from "vuefire";
 import { onMounted, ref } from "vue";
 import { redirectUri } from "@/spotify";
 import { getUserInfo } from "@/scripts/firebase";
 
-const user = useCurrentUser();
+import { useUserStore } from "@/stores/user";
+import { storeToRefs } from "pinia";
+const userStore = useUserStore();
+const { user } = storeToRefs(userStore);
+
 const db = useFirestore();
 const route = useRoute();
 console.log(route.query.code, user, user?.value?.uid);

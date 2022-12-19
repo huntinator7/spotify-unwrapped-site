@@ -37,6 +37,11 @@ const router = createRouter({
       name: "account",
       component: () => import("../views/AccountView.vue"),
     },
+    {
+      path: "/masquerade",
+      name: "masquerade",
+      component: () => import("../views/MasqueradeView.vue"),
+    },
   ],
 });
 

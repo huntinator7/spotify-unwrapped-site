@@ -7,9 +7,6 @@
       <button class="button danger" @click="deleteAccount">
         Delete Account
       </button>
-      <button class="button danger" @click="getSessionsTest">
-        Sessions Test
-      </button>
     </div>
   </main>
 </template>
@@ -17,20 +14,16 @@
 <script setup lang="ts">
 import Login from "@/components/LoginButton.vue";
 import { getAuth } from "@firebase/auth";
-import { useCurrentUser } from "vuefire";
 
-const user = useCurrentUser();
+import { useUserStore } from "@/stores/user";
+import { storeToRefs } from "pinia";
+const userStore = useUserStore();
+const { user } = storeToRefs(userStore);
 
 const auth = getAuth();
 
 function deleteAccount() {
   window.alert("you won't");
-}
-
-function getSessionsTest() {
-  fetch(
-    "https://us-central1-spotify-unwrapped-huntinator7.cloudfunctions.net/getSessionsTest"
-  );
 }
 </script>
 

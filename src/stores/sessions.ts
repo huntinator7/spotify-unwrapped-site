@@ -10,9 +10,15 @@ import {
   QueryDocumentSnapshot,
   startAfter,
 } from "firebase/firestore";
-import { useCurrentUser, useFirestore } from "vuefire";
+import { useFirestore } from "vuefire";
+
+import { useUserStore } from "@/stores/user";
+import { storeToRefs } from "pinia";
 
 export const useSessionStore = defineStore("sessions", () => {
+  const userStore = useUserStore();
+  const { user } = storeToRefs(userStore);
+
   const sessions: Ref<QueryDocumentSnapshot<SessionItem>[] | null> = ref(null);
 
   const sessionsList: ComputedRef<Session[] | null> = computed(
@@ -25,7 +31,6 @@ export const useSessionStore = defineStore("sessions", () => {
 
   async function getSessionsInternal() {
     const db = useFirestore();
-    const user = useCurrentUser();
 
     if (user.value) {
       console.log("getting sessions");

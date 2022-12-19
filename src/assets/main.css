@@ -118,6 +118,15 @@ a:hover,
   border-color: #191414;
 }
 
+.button.fullwidth {
+  width: -webkit-fill-available;
+  width: -moz-available;
+  margin-right: 2rem;
+  font-size: 2em;
+  margin-bottom: 1rem;
+  justify-content: center;
+}
+
 h1 {
   margin-bottom: 8px;
   text-align: center;

@@ -9,6 +9,12 @@
         <div>Ended {{ session.end_time }}</div>
         <div>Number of Songs: {{ session.play_references?.length }}</div>
       </div>
+      <button
+        class="button secondary fullwidth"
+        @click="sessionStore.getMoreSessions()"
+      >
+        See 20 more
+      </button>
     </div>
   </template>
   <template v-else>
@@ -45,7 +51,12 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+.session-list {
+  display: flex;
+  flex-direction: column;
+  overflow-x: auto;
+}
 .session {
-  margin: 2rem 0rem;
+  padding: 2rem 0rem;
 }
 </style>
