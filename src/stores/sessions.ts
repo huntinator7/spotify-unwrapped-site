@@ -12,7 +12,7 @@ import {
 } from "firebase/firestore";
 import { useCurrentUser, useFirestore } from "vuefire";
 
-export const useSessionStore = defineStore("plays", () => {
+export const useSessionStore = defineStore("sessions", () => {
   const sessions: Ref<QueryDocumentSnapshot<SessionItem>[] | null> = ref(null);
 
   const sessionsList: ComputedRef<Session[] | null> = computed(

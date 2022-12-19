@@ -66,8 +66,8 @@ const playsDisplay = computed(() => {
   return createPlaysDisplay(playsWithStats.value);
 });
 
-onMounted(async () => {
-  await playStore.getPlays();
+onMounted(() => {
+  playStore.getPlays();
 });
 </script>
 

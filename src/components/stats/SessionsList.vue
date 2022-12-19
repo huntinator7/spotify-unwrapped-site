@@ -39,9 +39,8 @@ const sessionsDisplay = computed(() => {
 const userStore = useUserStore();
 const { userLastUpdated } = storeToRefs(userStore);
 
-onMounted(async () => {
-  console.log(sessionStore, sessionStore?.getSessions);
-  await sessionStore.getSessions();
+onMounted(() => {
+  sessionStore.getSessions();
 });
 </script>
 
