@@ -14,21 +14,34 @@ export const useUserStore = defineStore("user", () => {
     return !!userInfo.value.refresh_token;
   });
 
-  async function setUserInfo() {
-    if (!user.value) return null;
-    const db = useFirestore();
-    const userData = await getDoc(doc(db, "User", user.value.uid));
-    userInfo.value = { ...userData.data(), id: userData.id } as User;
-  }
+  const userLastUpdated: ComputedRef<string> = computed(() =>
+    !userInfo.value
+      ? "Unknown"
+      : new Date(userInfo.value.last_updated).toLocaleString()
+  );
 
-  watch(user.value as Object, () => {
-    setUserInfo();
-  });
+  const getUserInfo = async (user: any): Promise<User> => {
+    console.log("getting user");
+    const db = useFirestore();
+    const userData = await getDoc(doc(db, "User", user.value?.uid || ""));
+    return { ...userData.data(), id: userData.id } as User;
+  };
+
+  watch(
+    user,
+    async () => {
+      if (user.value) {
+        userInfo.value = await getUserInfo(user);
+      }
+    },
+    { immediate: true }
+  );
 
   return {
     user,
     userInfo,
     hasSpotify,
-    setUserInfo,
+    userLastUpdated,
+    getUserInfo,
   };
 });

@@ -19,6 +19,18 @@ const router = createRouter({
       path: "/stats",
       name: "stats",
       component: () => import("../views/StatsHome.vue"),
+      children: [
+        {
+          path: "plays",
+          name: "plays",
+          component: () => import("../components/stats/PlaysList.vue"),
+        },
+        {
+          path: "sessions",
+          name: "sessions",
+          component: () => import("../components/stats/SessionsList.vue"),
+        },
+      ],
     },
     {
       path: "/account",

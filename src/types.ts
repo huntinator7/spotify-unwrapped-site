@@ -1,4 +1,8 @@
-export type Track = SpotifyApi.PlayHistoryObject & {
+import type { DocumentReference } from "firebase/firestore";
+
+export type PlayItem = SpotifyApi.PlayHistoryObject;
+
+export type Play = PlayItem & {
   id: string;
   stats: Stats;
 };
@@ -17,3 +21,15 @@ export type User = {
 interface Stats {
   playedAtFormatted: string;
 }
+
+export type SessionItem = {
+  start_time: string;
+  end_time: string;
+  latest_play: DocumentReference;
+  play_references: DocumentReference[];
+  duration_ms: number;
+};
+
+export type Session = SessionItem & {
+  id: string;
+};

@@ -1,6 +1,6 @@
 import { computed, ref, type ComputedRef, type Ref } from "vue";
 import { defineStore } from "pinia";
-import type { Track } from "@/types";
+import type { Play } from "@/types";
 import {
   collection,
   getDocs,
@@ -13,9 +13,9 @@ import {
 import { useCurrentUser, useFirestore } from "vuefire";
 
 export const usePlayStore = defineStore("plays", () => {
-  const plays: Ref<QueryDocumentSnapshot<Track>[] | null> = ref(null);
+  const plays: Ref<QueryDocumentSnapshot<Play>[] | null> = ref(null);
 
-  const playsWithStats: ComputedRef<Track[] | null> = computed(
+  const playsWithStats: ComputedRef<Play[] | null> = computed(
     () =>
       plays.value?.map((d) => ({
         ...d.data(),
@@ -50,7 +50,7 @@ export const usePlayStore = defineStore("plays", () => {
       plays.value = [
         ...(plays.value ?? []),
         ...res.docs,
-      ] as QueryDocumentSnapshot<Track>[];
+      ] as QueryDocumentSnapshot<Play>[];
     }
   }
 
