@@ -32,4 +32,5 @@ export type SessionItem = {
 
 export type Session = SessionItem & {
   id: string;
+  durationReadable?: string;
 };

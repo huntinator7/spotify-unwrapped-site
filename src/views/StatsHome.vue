@@ -4,7 +4,7 @@
     <Login v-if="!user" />
     <span v-else-if="!userInfo">Loading...</span>
     <SpotifyLink v-else-if="!hasSpotify" />
-    <div v-else>
+    <template v-else>
       <div class="links">
         <router-link class="button primary" to="/stats/plays"
           >Plays</router-link
@@ -14,7 +14,7 @@
         >
       </div>
       <router-view></router-view>
-    </div>
+    </template>
   </main>
 </template>
 

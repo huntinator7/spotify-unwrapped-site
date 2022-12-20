@@ -30,7 +30,7 @@ a:hover,
   text-align: center;
   border-radius: 8px;
   padding: 10px 20px;
-  border: 1px solid white;
+  border: 1px solid var(--color-white);
   font-size: 1rem;
   line-height: 1;
   text-indent: 0px;
@@ -51,71 +51,71 @@ a:hover,
 }
 
 .button {
-  background-color: white;
-  color: #191414;
+  background-color: var(--color-white);
+  color: var(--color-black);
 }
 
 .button:hover {
-  background-color: #191414;
-  color: white;
-  border-color: white;
+  background-color: var(--color-black);
+  color: var(--color-white);
+  border-color: var(--color-white);
 }
 
 .button:active {
-  background-color: white;
-  color: white;
-  border-color: white;
+  background-color: var(--color-white);
+  color: var(--color-white);
+  border-color: var(--color-white);
 }
 
 .button.danger {
-  background-color: #f53232;
-  color: #191414;
+  background-color: var(--color-danger);
+  color: var(--color-black);
 }
 
 .button.danger:hover {
-  background-color: #191414;
-  color: #f53232;
-  border-color: #f53232;
+  background-color: var(--color-black);
+  color: var(--color-danger);
+  border-color: var(--color-danger);
 }
 
 .button.danger:active {
-  background-color: #f53232;
-  color: #f53232;
-  border-color: #f53232;
+  background-color: var(--color-danger);
+  color: var(--color-danger);
+  border-color: var(--color-danger);
 }
 
 .button.primary {
-  background-color: #1ed760;
-  color: #191414;
+  background-color: var(--color-primary);
+  color: var(--color-black);
 }
 
 .button.primary:hover {
-  background-color: #191414;
-  color: #1ed760;
-  border-color: #1ed760;
+  background-color: var(--color-black);
+  color: var(--color-primary);
+  border-color: var(--color-primary);
 }
 
 .button.primary:active {
-  background-color: #1ed760;
-  color: #1ed760;
-  border-color: #1ed760;
+  background-color: var(--color-primary);
+  color: var(--color-primary);
+  border-color: var(--color-primary);
 }
 
 .button.secondary {
-  background-color: #191414;
-  color: white;
+  background-color: var(--color-black);
+  color: var(--color-white);
 }
 
 .button.secondary:hover {
-  background-color: white;
-  color: #191414;
-  border-color: #191414;
+  background-color: var(--color-white);
+  color: var(--color-black);
+  border-color: var(--color-black);
 }
 
 .button.secondary:active {
-  background-color: #191414;
-  color: #191414;
-  border-color: #191414;
+  background-color: var(--color-black);
+  color: var(--color-black);
+  border-color: var(--color-black);
 }
 
 .button.fullwidth {
@@ -145,6 +145,7 @@ main {
   background-color: var(--color-background);
   padding: 1rem;
   height: calc(100vh - 3.5em);
+  overflow-x: hidden;
 }
 
 ::-webkit-scrollbar {
@@ -172,28 +173,28 @@ main {
 }
 
 .v-sidebar-menu .vsm--link_level-1 .vsm--icon {
-  background-color: #1ed760 !important;
-  color: #191414 !important;
+  background-color: var(--color-primary) !important;
+  color: var(--color-black) !important;
 }
 
 .v-sidebar-menu .vsm--link_level-1.vsm--link_active {
-  -webkit-box-shadow: inset 3px 0 0 0 #1ed760;
-  box-shadow: inset 3px 0 0 0 #1ed760;
+  -webkit-box-shadow: inset 3px 0 0 0 var(--color-primary);
+  box-shadow: inset 3px 0 0 0 var(--color-primary);
 }
 
 .v-sidebar-menu .vsm--mobile-bg {
-  background-color: #1ed760;
-  color: #191414;
+  background-color: var(--color-primary);
+  color: var(--color-black);
 }
 
 .v-sidebar-menu .vsm--link_hover {
-  background-color: #1ed760;
-  color: #191414;
+  background-color: var(--color-primary);
+  color: var(--color-black);
 }
 
 .v-sidebar-menu.vsm_expanded .vsm--link_level-1.vsm--link_open {
-  background-color: #1ed760;
-  color: #191414;
+  background-color: var(--color-primary);
+  color: var(--color-black);
 }
 
 .fab {
@@ -203,9 +204,9 @@ main {
   height: 65px;
   width: 65px;
   border-radius: 65px;
-  background-color: #1ed760;
-  color: #191414;
-  border: 3px solid #191414;
+  background-color: var(--color-primary);
+  color: var(--color-black);
+  border: 3px solid var(--color-black);
 }
 
 .fab i {
@@ -214,14 +215,14 @@ main {
 
 .fab:hover {
   cursor: pointer;
-  background-color: #191414;
-  color: #1ed760;
-  border: 3px solid #1ed760;
+  background-color: var(--color-black);
+  color: var(--color-primary);
+  border: 3px solid var(--color-primary);
 }
 
 .fab:active {
   cursor: pointer;
-  background-color: #1ed760;
-  color: #1ed760;
-  border: 3px solid #1ed760;
+  background-color: var(--color-primary);
+  color: var(--color-primary);
+  border: 3px solid var(--color-primary);
 }

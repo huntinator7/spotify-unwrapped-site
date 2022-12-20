@@ -1,6 +1,6 @@
 import type { Session } from "@/types";
 
-export function createSessionsDisplay(sessions: Session[]) {
+export function createSessionsDisplay(sessions: Session[]): Session[] {
   return sessions.map((session) => ({
     ...session,
     start_time: new Date(session.start_time).toLocaleString(),

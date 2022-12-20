@@ -82,5 +82,7 @@ function hasCollapsed(c: boolean) {
   max-width: var(--width);
   -webkit-transition: max-width 0.3s ease;
   transition: max-width 0.3s ease;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 </style>

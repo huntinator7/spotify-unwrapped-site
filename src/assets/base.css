@@ -19,11 +19,16 @@
   --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
   --vt-c-text-dark-1: var(--vt-c-white);
   --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
+
+  --color-black: #191414;
+  --color-white: #ffffff;
 }
 
 /* semantic color variables for this project */
 :root {
   --color-background: var(--vt-c-white);
+  --color-primary: #1ed760;
+  --color-danger: #f53232;
   --color-background-soft: var(--vt-c-white-soft);
   --color-background-mute: var(--vt-c-white-mute);
 

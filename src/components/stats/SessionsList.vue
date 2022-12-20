@@ -2,20 +2,7 @@
   <span v-if="!sessionsDisplay">Loading...</span>
   <template v-else-if="sessionsDisplay.length">
     <div>Last Updated at {{ userLastUpdated }}</div>
-    <div class="session-list">
-      <div class="session" v-for="session in sessionsDisplay" :key="session.id">
-        <div>Started {{ session.start_time }}</div>
-        <div>Lasted {{ session.durationReadable }}</div>
-        <div>Ended {{ session.end_time }}</div>
-        <div>Number of Songs: {{ session.play_references?.length }}</div>
-      </div>
-      <button
-        class="button secondary fullwidth"
-        @click="sessionStore.getMoreSessions()"
-      >
-        See 20 more
-      </button>
-    </div>
+    <Timeline :sessions="sessionsDisplay" />
   </template>
   <template v-else>
     <div>History Empty</div>
@@ -33,6 +20,7 @@ import { storeToRefs } from "pinia";
 import { useSessionStore } from "@/stores/sessions";
 import { useUserStore } from "@/stores/user";
 import { createSessionsDisplay } from "@/scripts/helpers/sessions";
+import Timeline from "@/components/TimelineComponent.vue";
 
 const sessionStore = useSessionStore();
 const { sessionsList } = storeToRefs(sessionStore);
@@ -50,13 +38,4 @@ onMounted(() => {
 });
 </script>
 
-<style lang="scss" scoped>
-.session-list {
-  display: flex;
-  flex-direction: column;
-  overflow-x: auto;
-}
-.session {
-  padding: 2rem 0rem;
-}
-</style>
+<style lang="scss" scoped></style>
