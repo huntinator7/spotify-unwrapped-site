@@ -48,7 +48,7 @@ export const usePlayStore = defineStore("plays", () => {
         ...(page ? [startAfter(page)] : []),
       ];
       const q = query(
-        collection(db, "User", user.value?.uid, "Plays"),
+        collection(db, "User", user.value.uid ?? "", "Plays"),
         ...qConstraints
       );
       const res = await getDocs(q);
