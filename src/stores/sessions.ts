@@ -41,7 +41,7 @@ export const useSessionStore = defineStore("sessions", () => {
         ...(page ? [startAfter(page)] : []),
       ];
       const q = query(
-        collection(db, "User", user.value.uid, "Sessions"),
+        collection(db, "User", user.value.uid ?? "", "Sessions"),
         ...qConstraints
       );
       const res = await getDocs(q);
