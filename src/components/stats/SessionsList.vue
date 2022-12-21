@@ -3,6 +3,12 @@
   <template v-else-if="sessionsDisplay.length">
     <div>Last Updated at {{ userLastUpdated }}</div>
     <Timeline :sessions="sessionsDisplay" />
+    <button
+      class="button primary bottom"
+      @click="sessionStore.getMoreSessions()"
+    >
+      See Previous Sessions
+    </button>
   </template>
   <template v-else>
     <div>History Empty</div>
@@ -38,4 +44,8 @@ onMounted(() => {
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.button.bottom {
+  margin: 2rem 0rem;
+}
+</style>
