@@ -11,7 +11,7 @@
       <div
         class="session-line"
         :class="{ 'is-selected': hoverId == session.id }"
-        v-for="session in sessionsWithLines"
+        v-for="session in sessionsList"
         :key="session.id"
         :style="{
           top: session.line.top,
@@ -23,28 +23,57 @@
     <div
       class="session"
       :class="{ 'is-selected': hoverId == session.id }"
-      v-for="session in sessionsWithLines"
+      v-for="session in sessionsList"
       :key="session.id"
       :style="{
         top: `calc(${session.line.top} + ${session.line.height} / 2)`,
       }"
     >
+      <div class="session-header">
+        <button class="button transparent small" @click="hoverId = ''">
+          <i class="fa-solid fa-x"></i>
+        </button>
+      </div>
       <div>Started {{ session.start_time }}</div>
       <div>Lasted {{ session.durationReadable }}</div>
       <div>Ended {{ session.end_time }}</div>
       <div>Number of Songs: {{ session.play_references?.length }}</div>
-      <button class="button primary" style="margin-top: 4px">See Songs</button>
+      <div
+        class="session-play-list"
+        v-if="session.plays && showSongs[session.id]"
+      >
+        <div
+          class="session-play"
+          v-for="play in session.plays"
+          :key="play.played_at"
+        >
+          <img :src="play.track.album.images[2].url" width="32" height="32" />
+          <span>{{ play.track.name }}</span>
+        </div>
+      </div>
+      <button
+        class="button primary"
+        style="margin-top: 4px"
+        :disabled="loadingSongs[session.id]"
+        @click="toggleShowSongs(session)"
+      >
+        {{ showSongs[session.id] ? "Hide Songs" : "View Songs" }}
+      </button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { Session } from "@/types";
 import { computed, ref, type Ref, type ComputedRef } from "vue";
+import { useSessionStore } from "@/stores/sessions";
+import { storeToRefs } from "pinia";
+import type { SessionDisplay } from "@/types";
 
-const props = defineProps<{
-  sessions: Session[];
-}>();
+const sessionStore = useSessionStore();
+const { sessionsList } = storeToRefs(sessionStore);
+
+const loadingSongs: Ref<Record<string, boolean>> = ref({});
+const showSongs: Ref<Record<string, boolean>> = ref({});
 
 const hoverId: Ref<string> = ref("");
 
@@ -52,32 +81,12 @@ function selectHover(id: string) {
   hoverId.value = hoverId.value === id ? "" : id;
 }
 
-const sessionsWithLines = computed(() =>
-  props.sessions.map((session) => {
-    const today = new Date();
-    const tomorrowStart = new Date(today.setDate(today.getDate() + 1)).setHours(
-      0,
-      0,
-      0,
-      0
-    );
-    const top =
-      (tomorrowStart - new Date(session.end_time).valueOf()) /
-        (1000 * 24 * 10) +
-      "px";
-    return {
-      ...session,
-      line: {
-        top,
-        height: session.duration_ms / (1000 * 24 * 10) + "px",
-      },
-    };
-  })
-);
-
 const dates: ComputedRef<string[]> = computed(() => {
+  if (!sessionsList.value) return [];
   const newestDate = new Date();
-  const oldestDate = new Date(props.sessions.at(-1)?.start_time ?? Date.now());
+  const oldestDate = new Date(
+    sessionsList.value.at(-1)?.start_time ?? Date.now()
+  );
   const numDays =
     Math.ceil(
       (newestDate.valueOf() - oldestDate.valueOf()) / (24 * 60 * 60 * 1000)
@@ -91,6 +100,14 @@ function getDateString(dateNum: number) {
   const date = new Date(dateNum);
   return `${date.getMonth() + 1}/${date.getDate()}`;
 }
+
+async function toggleShowSongs(session: SessionDisplay) {
+  if (!sessionsList.value) return;
+  loadingSongs.value[session.id] = true;
+  await sessionStore.getPlaysForSession(session.id);
+  showSongs.value[session.id] = !showSongs.value[session.id];
+  loadingSongs.value[session.id] = false;
+}
 </script>
 
 <style lang="scss" scoped>
@@ -100,6 +117,7 @@ function getDateString(dateNum: number) {
   --line-width: 50px;
   --day-width: 200px;
   --session-br: 10px;
+  --session-width: 350px;
   margin-right: calc(var(--day-width) - var(--line-width));
 }
 .timeline {
@@ -125,10 +143,10 @@ function getDateString(dateNum: number) {
 .session {
   position: absolute;
   left: calc(var(--day-width) + var(--line-width));
-  min-width: 300px;
+  min-width: var(--session-width);
   padding: 10px;
-  background-color: var(--color-light-black);
-  color: var(--color-white);
+  background-color: var(--color-background-mute);
+  color: var(--color-text);
   transition: opacity 0.5s ease 0.3s, visibility 0s ease 0.3s;
   display: flex;
   flex-direction: column;
@@ -148,7 +166,7 @@ function getDateString(dateNum: number) {
 
 .session-line {
   width: var(--line-width);
-  background-color: var(--color-white);
+  background-color: var(--color-text);
   position: absolute;
   left: calc(var(--day-width) - var(--line-width));
   transition: width 0.5s ease;
@@ -162,10 +180,28 @@ function getDateString(dateNum: number) {
   cursor: pointer;
 }
 
+.session-header {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.session-play {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  span {
+    padding-left: 0.5rem;
+  }
+}
+
 @media (max-width: 1024px) {
   .session {
-    left: 0px;
-    margin-top: 0px;
+    left: calc(
+      (var(--day-width) * 2 - var(--line-width) - var(--session-width)) / 2
+    );
+    margin-top: 20px;
   }
 }
 </style>

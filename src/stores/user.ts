@@ -1,6 +1,5 @@
-import type { User } from "@/types";
-import type { User as FirebaseUser } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import type { MinimumUser, User } from "@/types";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { defineStore } from "pinia";
 import { computed, ref, watch, type ComputedRef, type Ref } from "vue";
 import { useCurrentUser, useFirestore } from "vuefire";
@@ -8,7 +7,7 @@ import { useCurrentUser, useFirestore } from "vuefire";
 export const useUserStore = defineStore("user", () => {
   const currentUser = useCurrentUser();
 
-  const testUser: Partial<FirebaseUser> = {
+  const testUser: MinimumUser = {
     uid: "vPXGkittqYRQMr9Z8egtGBQ2rOp2",
     providerData: [
       {
@@ -41,13 +40,11 @@ export const useUserStore = defineStore("user", () => {
       : new Date(userInfo.value.last_updated).toLocaleString()
   );
 
-  const getUserInfo = async (
-    user: Ref<Partial<FirebaseUser> | null | undefined>
-  ): Promise<User> => {
+  const getUserInfo = async (): Promise<void> => {
     console.log("getting user");
     const db = useFirestore();
     const userData = await getDoc(doc(db, "User", user.value?.uid || ""));
-    return { ...userData.data(), id: userData.id } as User;
+    userInfo.value = { ...userData.data(), id: userData.id } as User;
   };
 
   function enableMasqueraded() {
@@ -62,11 +59,21 @@ export const useUserStore = defineStore("user", () => {
     masqueraded.value = !masqueraded.value;
   }
 
+  async function toggleAccountPublic() {
+    const db = useFirestore();
+    if (userInfo.value && user.value) {
+      await updateDoc(doc(db, "User", user.value.uid), {
+        public: !userInfo.value.public,
+      });
+      await getUserInfo();
+    }
+  }
+
   watch(
     user,
     async () => {
       if (user.value) {
-        userInfo.value = await getUserInfo(user);
+        await getUserInfo();
       }
     },
     { immediate: true }
@@ -82,5 +89,6 @@ export const useUserStore = defineStore("user", () => {
     disableMasqueraded,
     toggleMasqueraded,
     masqueraded,
+    toggleAccountPublic,
   };
 });

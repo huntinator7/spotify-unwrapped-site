@@ -26,11 +26,10 @@ a:hover,
 
 .button {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   text-align: center;
   border-radius: 8px;
   padding: 10px 20px;
-  border: 1px solid var(--color-white);
   font-size: 1rem;
   line-height: 1;
   text-indent: 0px;
@@ -42,6 +41,7 @@ a:hover,
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  border: 1px solid;
 }
 
 .button:hover {
@@ -50,30 +50,64 @@ a:hover,
   border: 3px solid;
 }
 
+.button:disabled {
+  background-color: var(--color-black-1) !important;
+  color: var(--color-black-0) !important;
+  border-color: var(--color-black-0) !important;
+}
+
+.button:disabled:hover {
+  background-color: var(--color-black-1) !important;
+  color: var(--color-black-0) !important;
+  border-color: var(--color-black-0) !important;
+  cursor: not-allowed;
+  padding: 10px 20px;
+  border: 1px solid;
+}
+
 .button {
-  background-color: var(--color-white);
-  color: var(--color-black);
+  background-color: var(--color-button);
+  color: var(--color-text-alt);
+  border-color: var(--color-button-border);
 }
 
 .button:hover {
-  background-color: var(--color-black);
-  color: var(--color-white);
-  border-color: var(--color-white);
+  background-color: var(--color-text-alt);
+  color: var(--color-button);
+  border-color: var(--color-button-border);
 }
 
 .button:active {
-  background-color: var(--color-white);
-  color: var(--color-white);
-  border-color: var(--color-white);
+  background-color: var(--color-button);
+  color: var(--color-button);
+  border-color: var(--color-button-border);
+}
+
+.button.alt {
+  background-color: var(--color-button-alt);
+  color: var(--color-text);
+  border-color: var(--color-button-border);
+}
+
+.button.alt:hover {
+  background-color: var(--color-text);
+  color: var(--color-button-alt);
+  border-color: var(--color-button-border);
+}
+
+.button.alt:active {
+  background-color: var(--color-button-alt);
+  color: var(--color-button-alt);
+  border-color: var(--color-button-border);
 }
 
 .button.danger {
   background-color: var(--color-danger);
-  color: var(--color-black);
+  color: var(--color-black-0);
 }
 
 .button.danger:hover {
-  background-color: var(--color-black);
+  background-color: var(--color-background);
   color: var(--color-danger);
   border-color: var(--color-danger);
 }
@@ -86,11 +120,11 @@ a:hover,
 
 .button.primary {
   background-color: var(--color-primary);
-  color: var(--color-black);
+  color: var(--color-black-0);
 }
 
 .button.primary:hover {
-  background-color: var(--color-black);
+  background-color: var(--color-background);
   color: var(--color-primary);
   border-color: var(--color-primary);
 }
@@ -101,21 +135,33 @@ a:hover,
   border-color: var(--color-primary);
 }
 
-.button.secondary {
-  background-color: var(--color-black);
-  color: var(--color-white);
+.button.transparent {
+  background-color: var(--color-transparent-0);
+  color: var(--color-transparent-1);
+  border-color: var(--color-transparent-1);
 }
 
-.button.secondary:hover {
-  background-color: var(--color-white);
-  color: var(--color-black);
-  border-color: var(--color-black);
+.button.transparent:hover {
+  background-color: var(--color-transparent-0);
+  color: var(--color-transparent-2);
+  border-color: var(--color-transparent-2);
 }
 
-.button.secondary:active {
-  background-color: var(--color-black);
-  color: var(--color-black);
-  border-color: var(--color-black);
+.button.transparent:active {
+  background-color: var(--color-transparent-2);
+  color: var(--color-transparent-0);
+  border-color: var(--color-transparent-0);
+}
+
+.button.small {
+  font-size: 0.75rem;
+  padding: 5px 10px;
+}
+
+.button.small:hover {
+  padding: 3px 8px;
+  border: 3px solid;
+  border-radius: 4px;
 }
 
 .button.fullwidth {
@@ -125,6 +171,16 @@ a:hover,
   font-size: 2em;
   margin-bottom: 1rem;
   justify-content: center;
+}
+
+.button.form {
+  display: inline-block;
+  padding: 0px 20px;
+  height: 100%;
+}
+
+.button.form:hover {
+  padding: 0px 18px;
 }
 
 h1 {
@@ -153,12 +209,12 @@ main {
 }
 
 ::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 6px var(--color-scrollbar-track);
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: darkgrey;
-  outline: 1px solid slategrey;
+  background-color: var(--color-scrollbar);
+  outline: 1px solid var(--color-scrollbar-outline);
 }
 
 @media (max-width: 1024px) {
@@ -168,13 +224,13 @@ main {
 }
 
 * {
-  scrollbar-color: black darkgrey;
+  scrollbar-color: var(--color-scrollbar-track) var(--color-scrollbar);
   scrollbar-width: 1em;
 }
 
 .v-sidebar-menu .vsm--link_level-1 .vsm--icon {
   background-color: var(--color-primary) !important;
-  color: var(--color-black) !important;
+  color: var(--color-black-0) !important;
 }
 
 .v-sidebar-menu .vsm--link_level-1.vsm--link_active {
@@ -184,17 +240,17 @@ main {
 
 .v-sidebar-menu .vsm--mobile-bg {
   background-color: var(--color-primary);
-  color: var(--color-black);
+  color: var(--color-black-0);
 }
 
 .v-sidebar-menu .vsm--link_hover {
   background-color: var(--color-primary);
-  color: var(--color-black);
+  color: var(--color-black-0);
 }
 
 .v-sidebar-menu.vsm_expanded .vsm--link_level-1.vsm--link_open {
   background-color: var(--color-primary);
-  color: var(--color-black);
+  color: var(--color-black-0);
 }
 
 .fab {
@@ -205,8 +261,8 @@ main {
   width: 65px;
   border-radius: 65px;
   background-color: var(--color-primary);
-  color: var(--color-black);
-  border: 3px solid var(--color-black);
+  color: var(--color-black-0);
+  border: 3px solid var(--color-black-0);
 }
 
 .fab i {
@@ -215,7 +271,7 @@ main {
 
 .fab:hover {
   cursor: pointer;
-  background-color: var(--color-black);
+  background-color: var(--color-black-0);
   color: var(--color-primary);
   border: 3px solid var(--color-primary);
 }
@@ -225,4 +281,12 @@ main {
   background-color: var(--color-primary);
   color: var(--color-primary);
   border: 3px solid var(--color-primary);
+}
+
+input {
+  color: var(--color-white);
+  background-color: var(--color-input);
+  border: 1px solid var(--color-input-border);
+  border-radius: 4px;
+  font-size: 1.5rem;
 }

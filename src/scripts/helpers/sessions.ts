@@ -1,12 +1,31 @@
-import type { Session } from "@/types";
+import type { Session, SessionDisplay } from "@/types";
 
-export function createSessionsDisplay(sessions: Session[]): Session[] {
-  return sessions.map((session) => ({
-    ...session,
-    start_time: new Date(session.start_time).toLocaleString(),
-    end_time: new Date(session.end_time).toLocaleString(),
-    durationReadable: durationToDisplay(session.duration_ms / 1000),
-  }));
+export function createSessionsDisplay(sessions: Session[]): SessionDisplay[] {
+  console.log("createSessionsDisplay", sessions);
+  return sessions.map((session) => {
+    const today = new Date();
+    const tomorrowStart = new Date(today.setDate(today.getDate() + 1)).setHours(
+      0,
+      0,
+      0,
+      0
+    );
+    const top =
+      (tomorrowStart - new Date(session.end_time).valueOf()) /
+        (1000 * 24 * 10) +
+      "px";
+
+    return {
+      ...session,
+      start_time: new Date(session.start_time).toLocaleString(),
+      end_time: new Date(session.end_time).toLocaleString(),
+      durationReadable: durationToDisplay(session.duration_ms / 1000),
+      line: {
+        top,
+        height: session.duration_ms / (1000 * 24 * 10) + "px",
+      },
+    };
+  });
 }
 
 function durationToDisplay(d_s: number): string {

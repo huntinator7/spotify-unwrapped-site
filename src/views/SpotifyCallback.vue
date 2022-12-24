@@ -14,12 +14,11 @@ import { doc, updateDoc } from "firebase/firestore";
 import { useFirestore } from "vuefire";
 import { onMounted, ref } from "vue";
 import { redirectUri } from "@/spotify";
-import { getUserInfo } from "@/scripts/firebase";
 
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 const userStore = useUserStore();
-const { user } = storeToRefs(userStore);
+const { user, userInfo } = storeToRefs(userStore);
 
 const db = useFirestore();
 const route = useRoute();
@@ -50,9 +49,9 @@ onMounted(async () => {
     };
     return;
   }
-  const userInfo = await getUserInfo(user);
+  await userStore.getUserInfo();
 
-  if (route.query.state !== userInfo.spotify_state) {
+  if (route.query.state !== userInfo.value?.spotify_state) {
     linkRes.value = {
       success: false,
       loading: false,

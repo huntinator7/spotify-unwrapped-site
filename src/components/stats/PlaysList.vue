@@ -26,10 +26,7 @@
           <span>{{ play.stats.playedAtFormatted }}</span>
         </div>
       </template>
-      <button
-        class="button secondary fullwidth"
-        @click="playStore.getMorePlays()"
-      >
+      <button class="button alt fullwidth" @click="playStore.getMorePlays()">
         See 20 more
       </button>
     </div>
