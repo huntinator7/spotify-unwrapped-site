@@ -13,34 +13,39 @@ const router = createRouter({
     {
       path: "/callback",
       name: "callback",
-      component: () => import("../views/SpotifyCallback.vue"),
+      component: () => import("@/views/SpotifyCallback.vue"),
     },
     {
       path: "/stats",
       name: "stats",
-      component: () => import("../views/StatsHome.vue"),
+      component: () => import("@/views/PrivateStatsView.vue"),
       children: [
         {
           path: "plays",
           name: "plays",
-          component: () => import("../components/stats/PlaysList.vue"),
+          component: () => import("@/components/stats/PlaysList.vue"),
         },
         {
           path: "sessions",
           name: "sessions",
-          component: () => import("../components/stats/SessionsList.vue"),
+          component: () => import("@/components/stats/SessionsList.vue"),
         },
       ],
     },
     {
+      path: "/public",
+      name: "public",
+      component: () => import("@/views/PublicStatsView.vue"),
+    },
+    {
       path: "/account",
       name: "account",
-      component: () => import("../views/AccountView.vue"),
+      component: () => import("@/views/AccountView.vue"),
     },
     {
       path: "/masquerade",
       name: "masquerade",
-      component: () => import("../views/MasqueradeView.vue"),
+      component: () => import("@/views/MasqueradeView.vue"),
     },
   ],
 });

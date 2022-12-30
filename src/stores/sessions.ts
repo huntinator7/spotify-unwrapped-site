@@ -3,7 +3,6 @@ import { defineStore } from "pinia";
 import type { PlayItem, Session, SessionDisplay, SessionItem } from "@/types";
 import {
   collection,
-  doc,
   getDoc,
   getDocs,
   limit,

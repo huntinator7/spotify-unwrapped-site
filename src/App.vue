@@ -59,6 +59,11 @@ const menu: ComputedRef<any[]> = computed(() => [
     icon: "fa fa-bar-chart",
   },
   {
+    href: "/public",
+    title: "Public Stats",
+    icon: "fa fa-chart-line",
+  },
+  {
     href: "/account",
     title: "Account",
     icon: "fas fa-user",
