@@ -117,11 +117,11 @@ onMounted(async () => {
   padding: 3rem;
 }
 .vue-slider-process {
-  background-color: var(--color-primary);
+  background-color: var(--color-primary) !important;
 }
 .vue-slider-dot-tooltip-inner {
-  border-color: var(--color-primary);
-  background-color: var(--color-primary);
-  color: var(--color-black-0);
+  border-color: var(--color-primary) !important;
+  background-color: var(--color-primary) !important;
+  color: var(--color-black-0) !important;
 }
 </style>
