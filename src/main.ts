@@ -2,9 +2,7 @@ import { createApp } from "vue";
 import { createPinia } from "pinia";
 import { VueFire, VueFireAuth } from "vuefire";
 import VueSidebarMenu from "vue-sidebar-menu";
-import VueSlider from "vue-slider-component";
 
-import "vue-slider-component/theme/default.css";
 import "vue-sidebar-menu/dist/vue-sidebar-menu.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 
@@ -20,7 +18,6 @@ const app = createApp(App);
 app.use(createPinia());
 app.use(router);
 app.use(VueSidebarMenu);
-app.component("VueSlider", VueSlider);
 
 app.use(VueFire, {
   firebaseApp,

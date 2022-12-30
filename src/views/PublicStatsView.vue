@@ -1,17 +1,23 @@
 <template>
-  <div class="chart"><Line :data="data" :options="chartOptions" /></div>
-  <div class="slider">
-    Days to Show
-    <vue-slider
-      v-model="chartLimits"
-      :min="min"
-      :max="max"
-      :data="sliderData"
-      data-value="value"
-      data-label="key"
-      :enable-cross="false"
-    />
-  </div>
+  <h1>Charts n Stuff</h1>
+  <main class="content">
+    <div class="chart">
+      <h2>Active Sessions</h2>
+      <Line :data="data" :options="chartOptions" />
+      <div class="slider">
+        Days to Show
+        <VueSlider
+          v-model="chartLimits"
+          :min="min"
+          :max="max"
+          :data="sliderData"
+          data-value="value"
+          data-label="key"
+          :enable-cross="false"
+        />
+      </div>
+    </div>
+  </main>
 </template>
 
 <script setup lang="ts">
@@ -33,6 +39,7 @@ import {
 import { useFirestore } from "vuefire";
 import { computed, ref, type Ref, onMounted, type ComputedRef } from "vue";
 import { fromTimezone } from "@/scripts/helpers/publicStats";
+import VueSlider from "vue-3-slider-component";
 const db = useFirestore();
 
 ChartJS.register(
@@ -103,7 +110,8 @@ onMounted(async () => {
 
 <style lang="scss">
 .chart {
-  max-height: 80vh;
+  max-height: 70vh;
+  width: 80vw;
 }
 .slider {
   padding: 3rem;
