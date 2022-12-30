@@ -14,8 +14,6 @@
     <h2>Combine Sessions</h2>
     <span>key</span>
     <input v-model="combineSessionsKey" />
-    <span>uid</span>
-    <input v-model="combineSessionsId" />
     <button class="button danger" @click="combineSessionsManual">
       Combine Sessions
     </button>
@@ -24,6 +22,8 @@
     <h2>Init Aggregated Sessions</h2>
     <span>key</span>
     <input v-model="initAggregatedSessionsKey" />
+    <span>date</span>
+    <input v-model="initAggregatedSessionsDate" />
     <button class="button danger" @click="initAggregatedSessions">
       Init Aggregated Sessions
     </button>
@@ -40,7 +40,7 @@ const { masqueraded } = storeToRefs(userStore);
 const getListensKey = ref("");
 const combineSessionsKey = ref("");
 const initAggregatedSessionsKey = ref("");
-const combineSessionsId = ref("");
+const initAggregatedSessionsDate = ref("");
 
 function masquerade() {
   userStore.toggleMasqueraded();
@@ -54,13 +54,13 @@ function getListensManual() {
 
 function combineSessionsManual() {
   fetch(
-    `https://us-central1-spotify-unwrapped-huntinator7.cloudfunctions.net/combineSessionsManual?key=${combineSessionsKey.value}&uid=${combineSessionsId.value}`
+    `https://us-central1-spotify-unwrapped-huntinator7.cloudfunctions.net/combineSessionsManual?key=${combineSessionsKey.value}`
   );
 }
 
 function initAggregatedSessions() {
   fetch(
-    `https://us-central1-spotify-unwrapped-huntinator7.cloudfunctions.net/initAggregatedSessions?key=${initAggregatedSessionsKey.value}`
+    `https://us-central1-spotify-unwrapped-huntinator7.cloudfunctions.net/initAggregatedSessions?key=${initAggregatedSessionsKey.value}&date=${initAggregatedSessionsDate.value}`
   );
 }
 </script>
