@@ -1,7 +1,18 @@
 import type { DocumentReference } from "firebase/firestore";
 import type { User as FirebaseUser } from "firebase/auth";
 
-export type PlayItem = SpotifyApi.PlayHistoryObject;
+export type PlayItem = AllFields<NewPlayItem, SpotifyApi.PlayHistoryObject>;
+
+export type NewPlayItem = {
+  id: string;
+  name: string;
+  artists: { name: string; id: string }[];
+  album: { name: string; id: string; image: string };
+  played_at: string;
+  duration_ms: number;
+  popularity: number;
+  session?: DocumentReference;
+};
 
 export type Play = PlayItem & {
   id: string;
@@ -49,3 +60,9 @@ export type SessionDisplay = Session & {
 export type Nullable<T> = T | null | undefined;
 
 export type MinimumUser = { uid: string } & Partial<FirebaseUser>;
+
+// This utility lets T be indexed by any (string) key
+type Indexify<T> = T & { [str: string]: undefined };
+
+// Where the magic happens ✨
+type AllFields<T, R> = { [K in keyof (T & R) & string]: Indexify<T | R>[K] };

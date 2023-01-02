@@ -47,8 +47,12 @@
           v-for="play in session.plays"
           :key="play.played_at"
         >
-          <img :src="play.track.album.images[2].url" width="32" height="32" />
-          <span>{{ play.track.name }}</span>
+          <img
+            :src="play.track?.album?.images?.[2]?.url ?? play.album?.image"
+            width="32"
+            height="32"
+          />
+          <span>{{ play.track?.name ?? play.name }}</span>
         </div>
       </div>
       <button

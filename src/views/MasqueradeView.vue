@@ -28,6 +28,18 @@
       Init Aggregated Sessions
     </button>
   </div>
+  <div>
+    <h2>Shrink Plays Test</h2>
+    <span>key</span>
+    <input v-model="shrinkPlaysTestKey" />
+    <span>start</span>
+    <input v-model="shrinkPlaysTestStart" />
+    <span>limit</span>
+    <input v-model="shrinkPlaysTestLimit" />
+    <button class="button danger" @click="shrinkPlaysTest">
+      Shrink Plays Test
+    </button>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -41,6 +53,9 @@ const getListensKey = ref("");
 const combineSessionsKey = ref("");
 const initAggregatedSessionsKey = ref("");
 const initAggregatedSessionsDate = ref("");
+const shrinkPlaysTestKey = ref("");
+const shrinkPlaysTestStart = ref("");
+const shrinkPlaysTestLimit = ref("");
 
 function masquerade() {
   userStore.toggleMasqueraded();
@@ -61,6 +76,12 @@ function combineSessionsManual() {
 function initAggregatedSessions() {
   fetch(
     `https://us-central1-spotify-unwrapped-huntinator7.cloudfunctions.net/initAggregatedSessions?key=${initAggregatedSessionsKey.value}&date=${initAggregatedSessionsDate.value}`
+  );
+}
+
+function shrinkPlaysTest() {
+  fetch(
+    `https://us-central1-spotify-unwrapped-huntinator7.cloudfunctions.net/shrinkPlaysTest?key=${shrinkPlaysTestKey.value}&start=${shrinkPlaysTestStart.value}&limit=${shrinkPlaysTestLimit.value}`
   );
 }
 </script>
