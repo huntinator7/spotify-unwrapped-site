@@ -6,6 +6,7 @@
     <SpotifyLink v-else-if="!hasSpotify" />
     <template v-else>
       <div class="links">
+        <router-link class="button primary" to="/stats">General</router-link>
         <router-link class="button primary" to="/stats/plays"
           >Plays</router-link
         >

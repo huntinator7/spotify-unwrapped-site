@@ -30,6 +30,8 @@ export type User = {
   spotify_state: string;
   public: boolean;
   name?: string;
+  total_listen_time_ms: number;
+  total_plays: number;
 };
 
 interface Stats {
