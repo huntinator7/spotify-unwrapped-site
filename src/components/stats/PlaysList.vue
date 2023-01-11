@@ -16,15 +16,9 @@
           <h1>DAY {{ play }}</h1>
         </div>
         <div v-else class="track">
-          <img
-            :src="play.track?.album?.images?.[2]?.url ?? play.album?.image"
-            :height="imgHeight"
-            :width="imgHeight"
-          />
-          <span>{{ play.track?.name ?? play.name }}</span>
-          <span>{{
-            play.track?.artists?.[0]?.name ?? play.artists?.[0]?.name
-          }}</span>
+          <img :src="play.album.image" :height="imgHeight" :width="imgHeight" />
+          <span>{{ play.name }}</span>
+          <span>{{ play.artists[0].name }}</span>
           <span>{{ play.stats.playedAtFormatted }}</span>
         </div>
       </template>

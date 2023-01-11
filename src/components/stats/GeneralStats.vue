@@ -1,21 +1,77 @@
 <template>
   <h1>General Stats</h1>
-  <div v-if="userInfo">
-    <h2>Total Minutes Listened</h2>
-    <h1>{{ Math.round(userInfo.total_listen_time_ms / 60000) }}</h1>
-  </div>
-  <div v-if="userInfo">
-    <h2>Total Songs Played</h2>
-    <h1>{{ userInfo.total_plays }}</h1>
-  </div>
+  <template v-if="userInfo">
+    <div class="general-stat">
+      <h2>Total Minutes Listened</h2>
+      <h1>{{ Math.round(userInfo.total_listen_time_ms / 60000) }}</h1>
+    </div>
+    <div class="general-stat">
+      <h2>Total Songs Played</h2>
+      <h1>{{ userInfo.total_plays }}</h1>
+    </div>
+    <div class="general-stat">
+      <h2>Most Listened Songs</h2>
+      <div v-for="song in mostListenedSongs" :key="song.id" class="song">
+        <img :src="song.data().album.images[2].url" width="64" />
+        <div class="name-artist">
+          <span class="song-name">{{ song.data().name }}</span>
+          <span class="artist-name">{{ song.data().artists[0].name }}</span>
+        </div>
+        <span class="listen-count">x{{ song.data().listen_count }}</span>
+      </div>
+    </div>
+  </template>
 </template>
 
 <script setup lang="ts">
+import { useSongsStore } from "@/stores/songs";
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
+import { onMounted } from "vue";
 const userStore = useUserStore();
 
 const { userInfo } = storeToRefs(userStore);
+
+const songsStore = useSongsStore();
+
+const { mostListenedSongs } = storeToRefs(songsStore);
+
+onMounted(async () => {
+  await songsStore.getMostListenedSongs();
+});
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.general-stat {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  h2 {
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.song {
+  align-self: flex-start;
+  display: grid;
+  grid-template-columns: 64px 2fr 1fr;
+  column-gap: 10px;
+  width: 100%;
+  margin-bottom: 1rem;
+  .name-artist {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    .song-name {
+      font-size: 1.3rem;
+    }
+  }
+  .listen-count {
+    margin-left: 10px;
+    font-size: 2rem;
+    justify-self: flex-end;
+  }
+}
+</style>

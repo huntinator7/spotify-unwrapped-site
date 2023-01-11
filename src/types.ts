@@ -1,9 +1,7 @@
 import type { DocumentReference } from "firebase/firestore";
 import type { User as FirebaseUser } from "firebase/auth";
 
-export type PlayItem = AllFields<NewPlayItem, SpotifyApi.PlayHistoryObject>;
-
-export type NewPlayItem = {
+export type PlayItem = {
   id: string;
   name: string;
   artists: { name: string; id: string }[];
@@ -59,6 +57,16 @@ export type SessionDisplay = Session & {
   };
 };
 
+type ListenInfo = {
+  uid?: string;
+  listens: DocumentReference[];
+  listen_count?: number;
+};
+
+export type Song = SpotifyApi.TrackObjectFull & ListenInfo;
+
+export type Album = SpotifyApi.AlbumObjectSimplified & ListenInfo;
+
 export type Nullable<T> = T | null | undefined;
 
 export type MinimumUser = { uid: string } & Partial<FirebaseUser>;
@@ -67,4 +75,6 @@ export type MinimumUser = { uid: string } & Partial<FirebaseUser>;
 type Indexify<T> = T & { [str: string]: undefined };
 
 // Where the magic happens ✨
-type AllFields<T, R> = { [K in keyof (T & R) & string]: Indexify<T | R>[K] };
+export type AllFields<T, R> = {
+  [K in keyof (T & R) & string]: Indexify<T | R>[K];
+};
