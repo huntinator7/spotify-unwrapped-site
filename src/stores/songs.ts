@@ -1,8 +1,9 @@
 import { defineStore, storeToRefs } from "pinia";
-import { ref, type Ref } from "vue";
-import type { Song } from "@/types";
+import { ref, watch, type Ref } from "vue";
+import type { PlayItem, Song } from "@/types";
 import {
   collection,
+  getDoc,
   getDocs,
   limit,
   orderBy,
@@ -12,13 +13,24 @@ import {
 } from "firebase/firestore";
 import { useFirestore } from "vuefire";
 import { useUserStore } from "./user";
+import { cleanRef } from "@/scripts/firebase";
 
 export const useSongsStore = defineStore("songs", () => {
   const userStore = useUserStore();
   const { user } = storeToRefs(userStore);
 
-  const mostListenedSongs: Ref<QueryDocumentSnapshot<Song>[] | null> =
+  const mostListenedSongsSnapshot: Ref<QueryDocumentSnapshot<Song>[] | null> =
     ref(null);
+
+  const mostListenedSongs: Ref<Song[] | null> = ref(null);
+
+  watch(mostListenedSongsSnapshot, (newVal) => {
+    if (!newVal) {
+      mostListenedSongs.value = null;
+      return;
+    }
+    mostListenedSongs.value = newVal.map((v) => v.data());
+  });
 
   async function getMostListenedSongsInternal() {
     const db = useFirestore();
@@ -36,7 +48,7 @@ export const useSongsStore = defineStore("songs", () => {
         ...qConstraints
       );
       const res = await getDocs(q);
-      mostListenedSongs.value = [
+      mostListenedSongsSnapshot.value = [
         ...(mostListenedSongs.value ?? []),
         ...res.docs,
       ] as QueryDocumentSnapshot<Song>[];
@@ -60,10 +72,30 @@ export const useSongsStore = defineStore("songs", () => {
     await getMostListenedSongsInternal();
   }
 
+  async function getSongListens(songId: string) {
+    if (!mostListenedSongs.value) return;
+    const index = mostListenedSongs.value.findIndex((s) => s.id === songId);
+    if (index === -1) return;
+    if (mostListenedSongs.value[index].plays) {
+      console.log("already has plays");
+      return;
+    }
+    const song = mostListenedSongs.value[index];
+    const plays = await Promise.all(
+      song.listens.map(async (l) => {
+        return (await getDoc(cleanRef(l))).data() as PlayItem;
+      })
+    );
+    mostListenedSongs.value[index].plays = plays.sort((a, b) =>
+      a.played_at > b.played_at ? -1 : 1
+    );
+  }
+
   return {
     mostListenedSongs,
     getMostListenedSongs,
     refreshMostListenedSongs,
     getMoreMostListenedSongs,
+    getSongListens,
   };
 });

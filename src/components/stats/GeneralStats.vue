@@ -11,14 +11,28 @@
     </div>
     <div class="general-stat">
       <h2>Most Listened Songs</h2>
-      <div v-for="song in mostListenedSongs" :key="song.id" class="song">
-        <img :src="song.data().album.images[2].url" width="64" />
-        <div class="name-artist">
-          <span class="song-name">{{ song.data().name }}</span>
-          <span class="artist-name">{{ song.data().artists[0].name }}</span>
+      <template v-for="song in mostListenedSongs" :key="song.id">
+        <div class="song">
+          <img :src="song.album.images[2].url" width="64" />
+          <div class="name-artist">
+            <span class="song-name">{{ song.name }}</span>
+            <span class="artist-name">{{ song.artists[0].name }}</span>
+          </div>
+          <span class="listen-count">x{{ song.listen_count }}</span>
+          <button
+            class="button alt"
+            :disabled="loadingSongs[song.id]"
+            @click="toggleSongPlays(song.id)"
+          >
+            {{ showPlays[song.id] ? "Hide Plays" : "View Plays" }}
+          </button>
         </div>
-        <span class="listen-count">x{{ song.data().listen_count }}</span>
-      </div>
+        <div v-if="showPlays[song.id]" class="plays">
+          <div v-for="play in song.plays" :key="play.id">
+            {{ formatPlayedAt(play.played_at) }}
+          </div>
+        </div>
+      </template>
     </div>
   </template>
 </template>
@@ -27,7 +41,7 @@
 import { useSongsStore } from "@/stores/songs";
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
-import { onMounted } from "vue";
+import { onMounted, ref, type Ref } from "vue";
 const userStore = useUserStore();
 
 const { userInfo } = storeToRefs(userStore);
@@ -39,6 +53,23 @@ const { mostListenedSongs } = storeToRefs(songsStore);
 onMounted(async () => {
   await songsStore.getMostListenedSongs();
 });
+
+const loadingSongs: Ref<Record<string, boolean>> = ref({});
+const showPlays: Ref<Record<string, boolean>> = ref({});
+
+async function toggleSongPlays(songId: string) {
+  if (!mostListenedSongs.value) return;
+  loadingSongs.value[songId] = true;
+  await songsStore.getSongListens(songId);
+  showPlays.value[songId] = !showPlays.value[songId];
+  loadingSongs.value[songId] = false;
+}
+
+function formatPlayedAt(playedAt: string) {
+  return `${new Date(playedAt).toLocaleDateString()} ${new Date(
+    playedAt
+  ).toLocaleTimeString()}`;
+}
 </script>
 
 <style lang="scss" scoped>
@@ -56,7 +87,7 @@ onMounted(async () => {
 .song {
   align-self: flex-start;
   display: grid;
-  grid-template-columns: 64px 2fr 1fr;
+  grid-template-columns: 64px 2fr 1fr 1fr;
   column-gap: 10px;
   width: 100%;
   margin-bottom: 1rem;
@@ -73,5 +104,13 @@ onMounted(async () => {
     font-size: 2rem;
     justify-self: flex-end;
   }
+}
+.plays {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  margin-bottom: 2rem;
 }
 </style>

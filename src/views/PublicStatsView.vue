@@ -7,6 +7,7 @@
       <div class="slider">
         Days to Show
         <VueSlider
+          v-if="hasNumSessions"
           v-model="chartLimits"
           :min="min"
           :max="max"
@@ -37,7 +38,14 @@ import {
   QueryDocumentSnapshot,
 } from "@firebase/firestore";
 import { useFirestore } from "vuefire";
-import { computed, ref, type Ref, onMounted, type ComputedRef } from "vue";
+import {
+  computed,
+  ref,
+  onMounted,
+  watch,
+  type Ref,
+  type ComputedRef,
+} from "vue";
 import { fromTimezone } from "@/scripts/helpers/publicStats";
 import VueSlider from "vue-3-slider-component";
 const db = useFirestore();
@@ -64,11 +72,14 @@ const numSessions: ComputedRef<Record<string, number>> = computed(() =>
       .flat(1)
   )
 );
+const hasNumSessions = computed(() => !!Object.keys(numSessions.value).length);
 
 const min = ref(0);
-const max = computed(() => Object.keys(numSessions.value)?.length / 96 || 18);
+const max = computed(
+  () => Math.ceil(Object.keys(numSessions.value)?.length / 96) || 1
+);
 
-const chartLimits = ref([min.value, max.value]);
+const chartLimits = ref([0, 1]);
 
 const sliderData = computed(() =>
   numSessionsRaw.value.map((n, i) => ({ value: i, key: n.id }))
@@ -99,12 +110,15 @@ const chartOptions = {
   },
 };
 
-console.log(numSessions.value);
-
 onMounted(async () => {
   numSessionsRaw.value = (
-    await getDocs(collection(db, "Aggregated", "NumSessions", "12"))
+    await getDocs(collection(db, "Aggregated", "NumSessions", "01"))
   ).docs;
+});
+
+watch(max, (newVal) => {
+  chartLimits.value[0] = 0;
+  chartLimits.value[1] = newVal - 1;
 });
 </script>
 

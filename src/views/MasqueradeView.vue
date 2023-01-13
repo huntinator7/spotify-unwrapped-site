@@ -26,3 +26,10 @@ function masquerade() {
   userStore.toggleMasqueraded();
 }
 </script>
+
+<style lang="scss" scoped>
+.day {
+  overflow-y: auto;
+  height: 300px;
+}
+</style>

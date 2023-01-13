@@ -60,7 +60,8 @@ export type SessionDisplay = Session & {
 type ListenInfo = {
   uid?: string;
   listens: DocumentReference[];
-  listen_count?: number;
+  listen_count: number;
+  plays?: PlayItem[];
 };
 
 export type Song = SpotifyApi.TrackObjectFull & ListenInfo;

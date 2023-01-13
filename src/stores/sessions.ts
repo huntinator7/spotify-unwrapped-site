@@ -82,7 +82,6 @@ export const useSessionStore = defineStore("sessions", () => {
   }
 
   async function getPlaysForSession(sessionId: string) {
-    console.log(sessionId);
     const index = sessionsList.value?.findIndex((s) => s.id === sessionId);
     if (!sessionsList.value) {
       console.log("no sessionsList");
