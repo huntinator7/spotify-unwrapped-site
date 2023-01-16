@@ -1,11 +1,18 @@
 import type { MinimumUser, User } from "@/types";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getCountFromServer,
+  getDoc,
+  updateDoc,
+} from "firebase/firestore";
 import { defineStore } from "pinia";
 import { computed, ref, watch, type ComputedRef, type Ref } from "vue";
 import { useCurrentUser, useFirestore } from "vuefire";
 
 export const useUserStore = defineStore("user", () => {
   const currentUser = useCurrentUser();
+  const db = useFirestore();
 
   const testUser: MinimumUser = {
     uid: "vPXGkittqYRQMr9Z8egtGBQ2rOp2",
@@ -40,12 +47,42 @@ export const useUserStore = defineStore("user", () => {
       : new Date(userInfo.value.last_updated).toLocaleString()
   );
 
-  const getUserInfo = async (): Promise<void> => {
+  const uniquePlayCount = ref(0);
+  const uniqueSongCount = ref(0);
+  const uniqueAlbumCount = ref(0);
+  const uniqueArtistCount = ref(0);
+
+  async function getUserInfo() {
     console.log("getting user");
-    const db = useFirestore();
     const userData = await getDoc(doc(db, "User", user.value?.uid || ""));
     userInfo.value = { ...userData.data(), id: userData.id } as User;
-  };
+  }
+
+  async function getCounts() {
+    const collPlay = collection(db, "User", user.value?.uid ?? "", "Plays");
+    uniquePlayCount.value = (await getCountFromServer(collPlay)).data().count;
+
+    const collSong = collection(db, "User", user.value?.uid ?? "", "UserSongs");
+    uniqueSongCount.value = (await getCountFromServer(collSong)).data().count;
+
+    const collAlbum = collection(
+      db,
+      "User",
+      user.value?.uid ?? "",
+      "UserAlbums"
+    );
+    uniqueAlbumCount.value = (await getCountFromServer(collAlbum)).data().count;
+
+    const collArtist = collection(
+      db,
+      "User",
+      user.value?.uid ?? "",
+      "UserArtists"
+    );
+    uniqueArtistCount.value = (
+      await getCountFromServer(collArtist)
+    ).data().count;
+  }
 
   function enableMasqueraded() {
     masqueraded.value = true;
@@ -60,7 +97,6 @@ export const useUserStore = defineStore("user", () => {
   }
 
   async function toggleAccountPublic() {
-    const db = useFirestore();
     if (userInfo.value && user.value) {
       await updateDoc(doc(db, "User", user.value.uid), {
         public: !userInfo.value.public,
@@ -90,5 +126,10 @@ export const useUserStore = defineStore("user", () => {
     toggleMasqueraded,
     masqueraded,
     toggleAccountPublic,
+    getCounts,
+    uniquePlayCount,
+    uniqueSongCount,
+    uniqueAlbumCount,
+    uniqueArtistCount,
   };
 });

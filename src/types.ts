@@ -68,6 +68,8 @@ export type Song = SpotifyApi.TrackObjectFull & ListenInfo;
 
 export type Album = SpotifyApi.AlbumObjectSimplified & ListenInfo;
 
+export type Artist = SpotifyApi.ArtistObjectSimplified & ListenInfo;
+
 export type Nullable<T> = T | null | undefined;
 
 export type MinimumUser = { uid: string } & Partial<FirebaseUser>;

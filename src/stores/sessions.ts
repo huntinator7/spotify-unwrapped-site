@@ -1,37 +1,23 @@
 import { ref, watch, type Ref } from "vue";
 import { defineStore } from "pinia";
-import type { PlayItem, Session, SessionDisplay, SessionItem } from "@/types";
-import {
-  collection,
-  getDoc,
-  getDocs,
-  limit,
-  orderBy,
-  query,
-  QueryDocumentSnapshot,
-  startAfter,
-} from "firebase/firestore";
-import { useFirestore } from "vuefire";
-
-import { useUserStore } from "@/stores/user";
-import { storeToRefs } from "pinia";
+import type { PlayItem, SessionDisplay, SessionItem } from "@/types";
+import { getDoc, QueryDocumentSnapshot } from "firebase/firestore";
 import { createSessionsDisplay } from "@/scripts/helpers/sessions";
 import { cleanRef } from "@/scripts/firebase";
+import { getStoreItemInternalPaginated } from "@/scripts/helpers/store";
 
 export const useSessionStore = defineStore("sessions", () => {
-  const userStore = useUserStore();
-  const { user } = storeToRefs(userStore);
-
-  const sessions: Ref<QueryDocumentSnapshot<SessionItem>[] | null> = ref(null);
+  const sessionsSnapshot: Ref<QueryDocumentSnapshot<SessionItem>[] | null> =
+    ref(null);
 
   const sessionsList: Ref<SessionDisplay[] | null> = ref([]);
 
   watch(
-    sessions,
+    sessionsSnapshot,
     (newVal) => {
       console.log("watch sessions", newVal);
       const tempSessions =
-        sessions.value?.map((d) => ({
+        sessionsSnapshot.value?.map((d) => ({
           ...d.data(),
           id: d.id,
         })) ?? null;
@@ -42,30 +28,17 @@ export const useSessionStore = defineStore("sessions", () => {
   );
 
   async function getSessionsInternal() {
-    const db = useFirestore();
-
-    if (user.value) {
-      console.log("getting sessions");
-      const page = sessions.value?.at(-1);
-      const qConstraints = [
-        orderBy("start_time", "desc"),
-        limit(20),
-        ...(page ? [startAfter(page)] : []),
-      ];
-      const q = query(
-        collection(db, "User", user.value.uid ?? "", "Sessions"),
-        ...qConstraints
-      );
-      const res = await getDocs(q);
-      sessions.value = [
-        ...(sessions.value ?? []),
-        ...res.docs,
-      ] as QueryDocumentSnapshot<Session>[];
-    }
+    const newSnapshot = await getStoreItemInternalPaginated<SessionItem>(
+      sessionsSnapshot,
+      20,
+      "Sessions",
+      ["start_time", "desc"]
+    );
+    sessionsSnapshot.value = newSnapshot;
   }
 
   async function getSessions() {
-    if (sessions.value) {
+    if (sessionsSnapshot.value) {
       return;
     } else {
       getSessionsInternal();
@@ -73,7 +46,7 @@ export const useSessionStore = defineStore("sessions", () => {
   }
 
   async function refreshSessions() {
-    sessions.value = [];
+    sessionsSnapshot.value = [];
     await getSessionsInternal();
   }
 
@@ -104,7 +77,6 @@ export const useSessionStore = defineStore("sessions", () => {
   }
 
   return {
-    sessions,
     sessionsList,
     getSessions,
     refreshSessions,
