@@ -48,6 +48,7 @@
               I hope you like it. Feedback is always welcome, feel free to shoot
               me a Discord DM @ huntinator7#4680
             </h2>
+            <router-link class="button primary" to="/">Return Home</router-link>
             <h2 class="card-small">
               If you're rude, I will replace every song in your play history
               with Friday by Rebecca Black and you can't stop me

@@ -27,7 +27,7 @@
       <div class="card-large">{{ month.most_listened_song.listen_count }}x</div>
       <h2>
         in
-        {{ selectedMonth.month_name }} alone!
+        {{ selectedMonth?.month_name }} alone!
       </h2>
     </div>
     <h2 class="card-small">You really should branch out...</h2>

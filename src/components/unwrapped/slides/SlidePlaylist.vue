@@ -8,7 +8,7 @@
         ),
         url('https://playliststreams.com/wp-content/uploads/2020/04/abstract-spotify-desktop-wallpaper-62370-64314-hd-wallpapers.jpg');`"
   >
-    <h1>Your {{ selectedMonth.month_name }} Playlist</h1>
+    <h1>Your {{ selectedMonth?.month_name }} Playlist</h1>
     <h2>Here are your 50 most popular songs for the month</h2>
     <button class="scroll-button" @click="prev">▲</button>
     <div class="card-playlist" ref="cardPlaylist">
@@ -22,7 +22,13 @@
       Wanna save this playlist? Click below to have Unwrapped automatically
       create this playlist for you
     </h2>
-    <button class="button primary" @click="savePlaylist">Save Playlist</button>
+    <button
+      class="button primary"
+      @click="savePlaylist"
+      :disabled="playlistLoading"
+    >
+      Save Playlist
+    </button>
   </div>
 </template>
 
@@ -58,6 +64,7 @@ function next() {
   cardPlaylist.value.scrollTop += x.offsetHeight;
 }
 
+const playlistLoading = ref(false);
 async function savePlaylist() {
   if (!userInfo.value) {
     console.error("you must be signed in");
@@ -83,6 +90,7 @@ async function savePlaylist() {
       }
     >(functions, `https://createplaylist-5idnpodiaa-uc.a.run.app`);
     try {
+      playlistLoading.value = true;
       const createRes = await createPlaylistCall({
         month: props.selectedMonth.collection,
       });
@@ -93,6 +101,8 @@ async function savePlaylist() {
       }
     } catch (e) {
       toast(e as string, { type: "error" });
+    } finally {
+      playlistLoading.value = false;
     }
   }
 }

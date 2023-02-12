@@ -11,7 +11,7 @@
     <h1>Albums</h1>
     <div class="card-section">
       <h2>
-        If this was {{ selectedMonth.month_name }} 1978, you would have
+        If this was {{ selectedMonth?.month_name }} 1978, you would have
         collected
       </h2>
       <div class="card-large">{{ month.total_albums }}</div>

@@ -8,10 +8,10 @@
                 ),
                 url('https://images.pexels.com/photos/767172/pexels-photo-767172.jpeg');`"
   >
-    <h1>Your {{ selectedMonth.month_name }}, Unwrapped</h1>
+    <h1>Your {{ selectedMonth?.month_name }}, Unwrapped</h1>
     <div class="card-section">
       <h2>
-        Congrats, you survived {{ selectedMonth.month_name }}! And listened to
+        Congrats, you survived {{ selectedMonth?.month_name }}! And listened to
       </h2>
       <div class="card-large">{{ month.total_plays }}</div>
       <h2>songs along the way</h2>

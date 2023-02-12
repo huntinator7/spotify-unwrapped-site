@@ -7,7 +7,7 @@
           class="unwrapped-button"
           @click="selectMonth(availableMonth.id)"
         >
-          {{ availableMonth.month_name }}
+          {{ availableMonth?.month_name }}
         </button>
       </div>
     </template>
@@ -29,6 +29,7 @@ async function selectMonth(id: number) {
 }
 
 onUnmounted(() => {
+  console.log("unmounting");
   unwrappedStore.clearMonth();
 });
 </script>
