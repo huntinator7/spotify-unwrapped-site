@@ -19,7 +19,7 @@
 import UnwrappedPresentation from "@/components/unwrapped/UnwrappedPresentation.vue";
 import { useUnwrappedStore } from "@/stores/unwrapped";
 import { storeToRefs } from "pinia";
-import { onUnmounted } from "vue";
+// import { onUnmounted } from "vue";
 
 const unwrappedStore = useUnwrappedStore();
 const { selectedMonth, availableMonths } = storeToRefs(unwrappedStore);
@@ -28,10 +28,10 @@ async function selectMonth(id: number) {
   unwrappedStore.selectMonth(id);
 }
 
-onUnmounted(() => {
-  console.log("unmounting");
-  unwrappedStore.clearMonth();
-});
+// onUnmounted(() => {
+//   console.log("unmounting");
+//   unwrappedStore.clearMonth();
+// });
 </script>
 
 <style lang="scss" scoped>

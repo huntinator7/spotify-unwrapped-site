@@ -39,7 +39,7 @@ import { toast } from "vue3-toastify";
 import { useRouter } from "vue-router";
 import { getFunctions, httpsCallableFromURL } from "@firebase/functions";
 import { storeToRefs } from "pinia";
-import { ref, type VNodeRef, onMounted } from "vue";
+import { ref, type VNodeRef } from "vue";
 
 const props = defineProps<{
   selectedMonth: AvailableMonth;
@@ -52,16 +52,17 @@ const router = useRouter();
 const functions = getFunctions();
 
 const cardPlaylist = ref<VNodeRef | undefined>(undefined);
-onMounted(() => {
-  console.log(cardPlaylist.value);
-});
 function prev() {
   const x = cardPlaylist.value as HTMLElement;
-  cardPlaylist.value.scrollTop -= x.offsetHeight;
+  if (cardPlaylist.value) {
+    cardPlaylist.value.scrollTop -= x.offsetHeight;
+  }
 }
 function next() {
   const x = cardPlaylist.value as HTMLElement;
-  cardPlaylist.value.scrollTop += x.offsetHeight;
+  if (cardPlaylist.value) {
+    cardPlaylist.value.scrollTop += x.offsetHeight;
+  }
 }
 
 const playlistLoading = ref(false);

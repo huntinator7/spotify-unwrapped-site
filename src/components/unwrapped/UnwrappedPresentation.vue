@@ -6,7 +6,6 @@
         &lt;
       </button>
       <swiper
-        :ref="swiperRef"
         :slides-per-view="1"
         :space-between="50"
         mousewheel

@@ -17,23 +17,19 @@ export const useUnwrappedStore = defineStore("unwrapped", () => {
   const { userInfo } = storeToRefs(userStore);
 
   const monthSnapshot: Ref<QueryDocumentSnapshot<Month> | null> = ref(null);
-  const month: Ref<Month | null> = ref(null);
-  watch(monthSnapshot, (newVal) => {
-    if (!newVal) {
-      month.value = null;
-      return;
+  const month: ComputedRef<Month | null> = computed(() => {
+    if (!monthSnapshot.value) {
+      return null;
     }
-    month.value = newVal.data();
+    return monthSnapshot.value.data();
   });
 
   const topSongsSnapshot: Ref<QueryDocumentSnapshot<Song>[] | null> = ref(null);
-  const topSongs: Ref<Song[] | null> = ref(null);
-  watch(topSongsSnapshot, (newVal) => {
-    if (!newVal) {
-      topSongs.value = null;
-      return;
+  const topSongs: ComputedRef<Song[] | null> = computed(() => {
+    if (!topSongsSnapshot.value) {
+      return null;
     }
-    topSongs.value = newVal.map((v) => v.data());
+    return topSongsSnapshot.value.map((v) => v.data());
   });
 
   const selectedMonth: Ref<AvailableMonth | null> = ref(null);
@@ -55,6 +51,8 @@ export const useUnwrappedStore = defineStore("unwrapped", () => {
     const res = (await getDoc(
       doc(db, "User", userInfo.value.id, "Months", monthToGet)
     )) as QueryDocumentSnapshot<Month>;
+    console.log(monthSnapshot);
+    console.log(res);
     monthSnapshot.value = res;
   }
   async function getMonth(monthToGet: string) {
