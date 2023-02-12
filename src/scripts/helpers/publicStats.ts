@@ -14,3 +14,22 @@ export function fromTimezone(day: string, time: string): string {
     recTimeDate.getMinutes()
   )}`;
 }
+
+export const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+export function getDaysInMonth(date: string) {
+  return new Date(date).getDate();
+}

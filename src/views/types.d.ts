@@ -1,1 +1,1 @@
-declare module "vue-3-slider-component";
+declare module "vue-slider-component";

@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { doc, updateDoc } from "firebase/firestore";
 import { useFirestore } from "vuefire";
 import { onMounted, ref } from "vue";
@@ -22,6 +22,7 @@ const { user, userInfo } = storeToRefs(userStore);
 
 const db = useFirestore();
 const route = useRoute();
+const router = useRouter();
 console.log(route.query.code, user, user?.value?.uid);
 
 const linkRes = ref({
@@ -39,6 +40,9 @@ onMounted(async () => {
       message:
         "Error: No user found. Make sure you log in before linking your account",
     };
+    setTimeout(() => {
+      router.push("/");
+    }, 4000);
     return;
   }
   if (!route.query.code) {
@@ -47,6 +51,9 @@ onMounted(async () => {
       loading: false,
       message: "Error: No authorization code found",
     };
+    setTimeout(() => {
+      router.push("/");
+    }, 4000);
     return;
   }
   await userStore.getUserInfo();
@@ -57,6 +64,9 @@ onMounted(async () => {
       loading: false,
       message: "Error: State did not match expected value",
     };
+    setTimeout(() => {
+      router.push("/");
+    }, 4000);
     return;
   }
   const userRef = doc(db, "User", user?.value?.uid || "");
@@ -70,5 +80,8 @@ onMounted(async () => {
     loading: false,
     message: "Success! Your Spotify account has been linked!",
   };
+  setTimeout(() => {
+    router.push("/");
+  }, 4000);
 });
 </script>

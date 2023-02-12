@@ -9,11 +9,14 @@ import {
   query,
   QueryDocumentSnapshot,
   startAfter,
+  where,
 } from "firebase/firestore";
 import { useFirestore } from "vuefire";
 
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
+
+const PAGE_SIZE = 20;
 
 export const usePlayStore = defineStore("plays", () => {
   const userStore = useUserStore();
@@ -36,15 +39,20 @@ export const usePlayStore = defineStore("plays", () => {
       })) ?? null
   );
 
+  const searchQuery = ref("");
+  const hasMorePlays = ref(true);
+
   async function getPlaysInternal() {
     const db = useFirestore();
 
     if (user.value) {
       console.log("getting plays");
+      console.log(searchQuery.value);
       const page = plays.value?.at(-1);
       const qConstraints = [
+        ...buildSearchQuery(),
         orderBy("played_at", "desc"),
-        limit(20),
+        limit(PAGE_SIZE),
         ...(page ? [startAfter(page)] : []),
       ];
       const q = query(
@@ -52,10 +60,12 @@ export const usePlayStore = defineStore("plays", () => {
         ...qConstraints
       );
       const res = await getDocs(q);
+      console.log(res);
       plays.value = [
         ...(plays.value ?? []),
         ...res.docs,
       ] as QueryDocumentSnapshot<Play>[];
+      hasMorePlays.value = res.size === PAGE_SIZE;
     }
   }
 
@@ -69,6 +79,7 @@ export const usePlayStore = defineStore("plays", () => {
 
   async function refreshPlays() {
     plays.value = [];
+    hasMorePlays.value = true;
     await getPlaysInternal();
   }
 
@@ -76,5 +87,24 @@ export const usePlayStore = defineStore("plays", () => {
     await getPlaysInternal();
   }
 
-  return { plays, playsWithStats, getPlays, refreshPlays, getMorePlays };
+  function buildSearchQuery() {
+    if (searchQuery.value) {
+      return [
+        orderBy("name", "desc"),
+        where("name", ">=", searchQuery.value),
+        where("name", "<=", searchQuery.value + "\uf8ff"),
+      ];
+    }
+    return [];
+  }
+
+  return {
+    plays,
+    playsWithStats,
+    searchQuery,
+    hasMorePlays,
+    getPlays,
+    refreshPlays,
+    getMorePlays,
+  };
 });

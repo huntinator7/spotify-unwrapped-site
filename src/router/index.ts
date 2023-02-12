@@ -48,6 +48,11 @@ const router = createRouter({
       component: () => import("@/views/AccountView.vue"),
     },
     {
+      path: "/unwrapped",
+      name: "unwrapped",
+      component: () => import("@/views/UnwrappedView.vue"),
+    },
+    {
       path: "/masquerade",
       name: "masquerade",
       component: () => import("@/views/MasqueradeView.vue"),

@@ -6,6 +6,7 @@
     :relative="!isMobile"
     :hideToggle="isMobile"
     :width-collapsed="isMobile ? '0px' : '65px'"
+    show-child
     @update:collapsed="hasCollapsed"
     @item-click="onItemClick"
   />
@@ -28,6 +29,7 @@ import imgUrl from "@/assets/logo64.png";
 import { ref, type ComputedRef } from "vue";
 import { computed } from "vue";
 import { useMedia } from "@/scripts/media";
+import { useUnwrappedStore } from "./stores/unwrapped";
 
 const isMobile = useMedia("(max-width: 1024px)");
 
@@ -54,9 +56,14 @@ const menu: ComputedRef<any[]> = computed(() => [
     },
   },
   {
-    href: "/stats",
-    title: "Stats",
+    id: "stats",
+    title: "My Stats",
     icon: "fa fa-bar-chart",
+    child: [
+      { href: "/stats", title: "General" },
+      { href: "/stats/plays", title: "Plays" },
+      { href: "/stats/sessions", title: "Sessions" },
+    ],
   },
   {
     href: "/public",
@@ -68,11 +75,24 @@ const menu: ComputedRef<any[]> = computed(() => [
     title: "Account",
     icon: "fas fa-user",
   },
+  {
+    id: "unwrapped",
+    href: "/unwrapped",
+    title: "Unwrapped",
+    icon: "fas fa-box-open",
+  },
 ]);
 
-function onItemClick() {
-  if (isMobile) {
+const unwrappedStore = useUnwrappedStore();
+function onItemClick(_event: any, item: any) {
+  if (isMobile.value && !!item.href) {
     collapsed.value = true;
+  }
+  if (item.id === "stats" && !isMobile.value && collapsed.value) {
+    collapsed.value = false;
+  }
+  if (item.id === "unwrapped") {
+    unwrappedStore.clearMonth();
   }
 }
 

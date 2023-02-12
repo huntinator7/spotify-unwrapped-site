@@ -5,7 +5,7 @@
     <span v-else-if="!userInfo">Loading...</span>
     <SpotifyLink v-else-if="!hasSpotify" />
     <template v-else>
-      <div class="links">
+      <div v-if="!isMobile" class="links">
         <router-link class="button primary" to="/stats">General</router-link>
         <router-link class="button primary" to="/stats/plays"
           >Plays</router-link
@@ -27,10 +27,13 @@ import Login from "@/components/LoginButton.vue";
 import SpotifyLink from "@/components/SpotifyLink.vue";
 
 import { useUserStore } from "@/stores/user";
+import { useMedia } from "@/scripts/media";
 
 const userStore = useUserStore();
 
 const { user, hasSpotify, userInfo } = storeToRefs(userStore);
+
+const isMobile = useMedia("(max-width: 1024px)");
 
 watch(userInfo, (newVal) => {
   console.log(newVal);
