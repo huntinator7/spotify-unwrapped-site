@@ -92,10 +92,10 @@ const { month, selectedMonth, topSongs } = storeToRefs(unwrappedStore);
 
 const swiperRef: Ref<any> = ref(null);
 function nextPage() {
-  swiperRef.value.slideNext();
+  swiperRef.value?.slideNext();
 }
 function previousPage() {
-  swiperRef.value.slidePrev();
+  swiperRef.value?.slidePrev();
 }
 function onSwiper(swiper: any) {
   swiperRef.value = swiper;
