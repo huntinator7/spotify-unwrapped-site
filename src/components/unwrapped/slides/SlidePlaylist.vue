@@ -10,12 +10,14 @@
   >
     <h1>Your {{ selectedMonth.month_name }} Playlist</h1>
     <h2>Here are your 50 most popular songs for the month</h2>
-    <div class="card-playlist">
+    <button class="scroll-button" @click="prev">▲</button>
+    <div class="card-playlist" ref="cardPlaylist">
       <div v-for="song in topSongs" :key="song.id" class="card-playlist-item">
         <img :src="song.album.images[2].url" width="32" height="32" />
         <span>{{ song.name }}</span>
       </div>
     </div>
+    <button class="scroll-button" @click="next">▼</button>
     <h2>
       Wanna save this playlist? Click below to have Unwrapped automatically
       create this playlist for you
@@ -31,6 +33,7 @@ import { toast } from "vue3-toastify";
 import { useRouter } from "vue-router";
 import { getFunctions, httpsCallableFromURL } from "@firebase/functions";
 import { storeToRefs } from "pinia";
+import { ref, type VNodeRef, onMounted } from "vue";
 
 const props = defineProps<{
   selectedMonth: AvailableMonth;
@@ -41,6 +44,19 @@ const userStore = useUserStore();
 const { userInfo } = storeToRefs(userStore);
 const router = useRouter();
 const functions = getFunctions();
+
+const cardPlaylist = ref<VNodeRef | undefined>(undefined);
+onMounted(() => {
+  console.log(cardPlaylist.value);
+});
+function prev() {
+  const x = cardPlaylist.value as HTMLElement;
+  cardPlaylist.value.scrollTop -= x.offsetHeight;
+}
+function next() {
+  const x = cardPlaylist.value as HTMLElement;
+  cardPlaylist.value.scrollTop += x.offsetHeight;
+}
 
 async function savePlaylist() {
   if (!userInfo.value) {
@@ -81,3 +97,33 @@ async function savePlaylist() {
   }
 }
 </script>
+
+<style scoped lang="scss">
+.card-playlist {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(25, 32px);
+  column-gap: 1rem;
+  row-gap: 8px;
+  height: 40vh;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+.card-playlist-item {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  overflow: hidden;
+  white-space: nowrap;
+  span {
+    padding-left: 0.5rem;
+    text-align: initial;
+  }
+}
+.scroll-button {
+  width: 100%;
+  background-color: #fff2;
+  border: none;
+  height: 32px;
+}
+</style>

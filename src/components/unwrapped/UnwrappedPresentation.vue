@@ -9,6 +9,7 @@
         :ref="swiperRef"
         :slides-per-view="1"
         :space-between="50"
+        mousewheel
         @swiper="onSwiper"
       >
         <swiper-slide>
@@ -173,27 +174,6 @@ function onSwiper(swiper: any) {
   }
   &:hover {
     cursor: pointer;
-  }
-}
-.card-playlist {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: repeat(25, 32px);
-  column-gap: 1rem;
-  row-gap: 0.5rem;
-  height: 50vh;
-  overflow-y: auto;
-}
-.card-playlist-item {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  margin-bottom: 0.5rem;
-  overflow: hidden;
-  white-space: nowrap;
-  span {
-    padding-left: 0.5rem;
-    text-align: initial;
   }
 }
 </style>
