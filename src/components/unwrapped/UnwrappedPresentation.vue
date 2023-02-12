@@ -124,8 +124,6 @@ function onSwiper(swiper: any) {
     margin-bottom: 0;
     background-color: var(--color-primary);
     color: var(--color-black-0);
-    padding: 0rem 5rem;
-    margin: 0rem 5rem;
   }
   h2 {
     font-size: 2vh;
