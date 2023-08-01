@@ -1,67 +1,71 @@
 <template>
   <div v-if="!month || !selectedMonth">Loading...</div>
   <template v-else>
-    <div class="myswipe">
-      <button v-if="!isMobile" class="swipe-nav left" @click="previousPage">
-        &lt;
-      </button>
-      <swiper
-        :slides-per-view="1"
-        :space-between="50"
-        mousewheel
-        @swiper="onSwiper"
-      >
-        <swiper-slide>
-          <SlideIntro :selected-month="selectedMonth" :month="month" />
-        </swiper-slide>
-        <swiper-slide>
-          <SlideSongs :selected-month="selectedMonth" :month="month" />
-        </swiper-slide>
-        <swiper-slide>
-          <SlideArtists :month="month" />
-        </swiper-slide>
-        <swiper-slide>
-          <SlideAlbums :selected-month="selectedMonth" :month="month" />
-        </swiper-slide>
-        <swiper-slide>
-          <SlideDays :month="month" />
-        </swiper-slide>
-        <swiper-slide>
-          <SlidePlaylist
-            :selected-month="selectedMonth"
-            :top-songs="topSongs"
-          />
-        </swiper-slide>
-        <swiper-slide>
-          <div
-            class="card"
-            :style="`
+    <main class="content">
+      <div class="myswipe">
+        <button v-if="!isMobile" class="swipe-nav left" @click="previousPage">
+          &lt;
+        </button>
+        <swiper
+          :slides-per-view="1"
+          :space-between="50"
+          mousewheel
+          @swiper="onSwiper"
+        >
+          <swiper-slide>
+            <SlideIntro :selected-month="selectedMonth" :month="month" />
+          </swiper-slide>
+          <swiper-slide>
+            <SlideSongs :selected-month="selectedMonth" :month="month" />
+          </swiper-slide>
+          <swiper-slide>
+            <SlideArtists :month="month" />
+          </swiper-slide>
+          <swiper-slide>
+            <SlideAlbums :selected-month="selectedMonth" :month="month" />
+          </swiper-slide>
+          <swiper-slide>
+            <SlideDays :month="month" />
+          </swiper-slide>
+          <swiper-slide>
+            <SlidePlaylist
+              :selected-month="selectedMonth"
+              :top-songs="topSongs"
+            />
+          </swiper-slide>
+          <swiper-slide>
+            <div
+              class="card"
+              :style="`
               background-image: linear-gradient(
                   rgba(0, 0, 0, 0.75),
                   rgba(0, 0, 0, 0.75)
                 ),
                 url('${imgUrl}'); background-size: contain; background-repeat: no-repeat;`"
+            >
+              <div style="font-size: 8vh">Thanks for using Unwrapped!</div>
+              <h2>
+                I hope you like it. Feedback is always welcome, feel free to
+                shoot me a Discord DM @ huntinator7#4680
+              </h2>
+              <router-link class="button primary" to="/"
+                >Return Home</router-link
+              >
+              <h2 class="card-small">
+                If you're rude, I will replace every song in your play history
+                with Friday by Rebecca Black and you can't stop me
+              </h2>
+            </div>
+          </swiper-slide>
+        </swiper>
+        <button v-if="!isMobile" class="swipe-nav right" @click="nextPage">
           >
-            <div style="font-size: 8vh">Thanks for using Unwrapped!</div>
-            <h2>
-              I hope you like it. Feedback is always welcome, feel free to shoot
-              me a Discord DM @ huntinator7#4680
-            </h2>
-            <router-link class="button primary" to="/">Return Home</router-link>
-            <h2 class="card-small">
-              If you're rude, I will replace every song in your play history
-              with Friday by Rebecca Black and you can't stop me
-            </h2>
-          </div>
-        </swiper-slide>
-      </swiper>
-      <button v-if="!isMobile" class="swipe-nav right" @click="nextPage">
-        >
-      </button>
-    </div>
-    <RouterLink class="button alt" style="margin-top: 1rem" to="/unwrapped">
-      Back
-    </RouterLink>
+        </button>
+      </div>
+      <RouterLink class="button alt" style="margin-top: 1rem" to="/unwrapped">
+        Back
+      </RouterLink>
+    </main>
   </template>
 </template>
 
