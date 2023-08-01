@@ -84,8 +84,12 @@ import SlideAlbums from "@/components/unwrapped/slides/SlideAlbums.vue";
 import SlideDays from "@/components/unwrapped/slides/SlideDays.vue";
 import SlidePlaylist from "@/components/unwrapped/slides/SlidePlaylist.vue";
 import { RouterLink, useRoute } from "vue-router";
+import { useUserStore } from "@/stores/user";
 
 const isMobile = useMedia("(max-width: 1024px)");
+
+const userStore = useUserStore();
+const { userInfo } = storeToRefs(userStore);
 
 const unwrappedStore = useUnwrappedStore();
 const { month, selectedMonth, topSongs } = storeToRefs(unwrappedStore);
@@ -94,6 +98,7 @@ const route = useRoute();
 onMounted(() => {
   const queryMonth = route.params["month"];
   console.log(queryMonth);
+  console.log(userInfo.value);
   if (queryMonth) {
     unwrappedStore.selectMonth(Number.parseInt(queryMonth.toString()));
   }

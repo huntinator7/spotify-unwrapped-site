@@ -86,6 +86,7 @@ export const useUnwrappedStore = defineStore("unwrapped", () => {
   }
 
   function selectMonth(id: number) {
+    console.log(availableMonths.value);
     const selected = availableMonths.value.find((month) => month.id === id);
     if (selected) {
       selectedMonth.value = selected;
