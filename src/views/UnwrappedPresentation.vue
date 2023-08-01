@@ -98,6 +98,7 @@ const route = useRoute();
 watch(
   () => userInfo.value,
   (newVal, oldVal) => {
+    console.log(newVal, oldVal);
     if (!oldVal && !!newVal) {
       const queryMonth = route.params["month"];
       console.log(queryMonth);
