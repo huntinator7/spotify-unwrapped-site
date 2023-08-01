@@ -74,7 +74,7 @@ import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 import { useUnwrappedStore } from "@/stores/unwrapped";
 import { storeToRefs } from "pinia";
-import { onMounted, ref, type Ref } from "vue";
+import { ref, watch, type Ref } from "vue";
 import { useMedia } from "@/scripts/media";
 import imgUrl from "@/assets/logo512.png";
 import SlideIntro from "@/components/unwrapped/slides/SlideIntro.vue";
@@ -95,14 +95,16 @@ const unwrappedStore = useUnwrappedStore();
 const { month, selectedMonth, topSongs } = storeToRefs(unwrappedStore);
 
 const route = useRoute();
-onMounted(() => {
-  const queryMonth = route.params["month"];
-  console.log(queryMonth);
-  console.log(userInfo.value);
-  if (queryMonth) {
-    unwrappedStore.selectMonth(Number.parseInt(queryMonth.toString()));
+watch(
+  () => userInfo.value,
+  (newVal, oldVal) => {
+    if (!oldVal && !!newVal) {
+      const queryMonth = route.params["month"];
+      console.log(queryMonth);
+      unwrappedStore.selectMonth(Number.parseInt(queryMonth.toString()));
+    }
   }
-});
+);
 
 const swiperRef: Ref<any> = ref(null);
 function nextPage() {
