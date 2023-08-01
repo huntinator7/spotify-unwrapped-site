@@ -53,6 +53,11 @@ const router = createRouter({
       component: () => import("@/views/UnwrappedView.vue"),
     },
     {
+      path: "/unwrapped/:month",
+      name: "unwrapped-month",
+      component: () => import("@/views/UnwrappedPresentation.vue"),
+    },
+    {
       path: "/masquerade",
       name: "masquerade",
       component: () => import("@/views/MasqueradeView.vue"),

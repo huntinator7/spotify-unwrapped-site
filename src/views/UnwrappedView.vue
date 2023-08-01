@@ -1,47 +1,40 @@
 <template>
   <h1>Unwrapped</h1>
   <main class="content">
-    <template v-if="!selectedMonth">
-      <div v-for="availableMonth in availableMonths" :key="availableMonth.id">
-        <button
-          class="unwrapped-button"
-          @click="selectMonth(availableMonth.id)"
-        >
-          {{ availableMonth?.month_name }}
-        </button>
-      </div>
-    </template>
-    <UnwrappedPresentation v-else />
+    <div v-for="availableMonth in availableMonths" :key="availableMonth.id">
+      <RouterLink
+        class="unwrapped-button"
+        :to="`/unwrapped/${availableMonth.id}`"
+      >
+        {{ availableMonth?.month_name }}
+      </RouterLink>
+    </div>
   </main>
 </template>
 
 <script setup lang="ts">
-import UnwrappedPresentation from "@/components/unwrapped/UnwrappedPresentation.vue";
 import { useUnwrappedStore } from "@/stores/unwrapped";
 import { storeToRefs } from "pinia";
-// import { onUnmounted } from "vue";
+import { onMounted } from "vue";
+import { RouterLink } from "vue-router";
 
 const unwrappedStore = useUnwrappedStore();
-const { selectedMonth, availableMonths } = storeToRefs(unwrappedStore);
+const { availableMonths } = storeToRefs(unwrappedStore);
 
-async function selectMonth(id: number) {
-  unwrappedStore.selectMonth(id);
-}
-
-// onUnmounted(() => {
-//   console.log("unmounting");
-//   unwrappedStore.clearMonth();
-// });
+onMounted(() => {
+  unwrappedStore.clearMonth();
+});
 </script>
 
 <style lang="scss" scoped>
 .unwrapped-button {
-  width: 80vw;
+  width: 100%;
   font-size: min(14vw, 8rem);
-  border-radius: 1em;
+  border-radius: 0;
   color: var(--color-primary);
   background-color: var(--color-background);
-  border: 3px solid var(--color-primary);
+  border: none;
+  padding: 10px 20px;
   &:hover {
     cursor: pointer;
     color: var(--color-black-0);

@@ -59,13 +59,9 @@
         >
       </button>
     </div>
-    <button
-      class="button alt"
-      style="margin-top: 1rem"
-      @click="unwrappedStore.clearMonth()"
-    >
+    <RouterLink class="button alt" style="margin-top: 1rem" to="/unwrapped">
       Back
-    </button>
+    </RouterLink>
   </template>
 </template>
 
@@ -74,20 +70,30 @@ import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 import { useUnwrappedStore } from "@/stores/unwrapped";
 import { storeToRefs } from "pinia";
-import { ref, type Ref } from "vue";
+import { onMounted, ref, type Ref } from "vue";
 import { useMedia } from "@/scripts/media";
 import imgUrl from "@/assets/logo512.png";
-import SlideIntro from "./slides/SlideIntro.vue";
-import SlideSongs from "./slides/SlideSongs.vue";
-import SlideArtists from "./slides/SlideArtists.vue";
-import SlideAlbums from "./slides/SlideAlbums.vue";
-import SlideDays from "./slides/SlideDays.vue";
-import SlidePlaylist from "./slides/SlidePlaylist.vue";
+import SlideIntro from "@/components/unwrapped/slides/SlideIntro.vue";
+import SlideSongs from "@/components/unwrapped/slides/SlideSongs.vue";
+import SlideArtists from "@/components/unwrapped/slides/SlideArtists.vue";
+import SlideAlbums from "@/components/unwrapped/slides/SlideAlbums.vue";
+import SlideDays from "@/components/unwrapped/slides/SlideDays.vue";
+import SlidePlaylist from "@/components/unwrapped/slides/SlidePlaylist.vue";
+import { RouterLink, useRoute } from "vue-router";
 
 const isMobile = useMedia("(max-width: 1024px)");
 
 const unwrappedStore = useUnwrappedStore();
 const { month, selectedMonth, topSongs } = storeToRefs(unwrappedStore);
+
+const route = useRoute();
+onMounted(() => {
+  const queryMonth = route.params["month"];
+  console.log(queryMonth);
+  if (queryMonth) {
+    unwrappedStore.selectMonth(Number.parseInt(queryMonth.toString()));
+  }
+});
 
 const swiperRef: Ref<any> = ref(null);
 function nextPage() {
