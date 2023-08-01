@@ -56,7 +56,7 @@ export const useMostListenedStore = defineStore("mostListened", () => {
     }
     const song = mostListenedSongs.value[index];
     const plays = await Promise.all(
-      song.listens.map(async (l) => {
+      song.listens.slice(0, 20).map(async (l) => {
         return (await getDoc(cleanRef(l))).data() as PlayItem;
       })
     );
