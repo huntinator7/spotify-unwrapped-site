@@ -46,7 +46,7 @@
               <div style="font-size: 8vh">Thanks for using Unwrapped!</div>
               <h2>
                 I hope you like it. Feedback is always welcome, feel free to
-                shoot me a Discord DM @ huntinator7#4680
+                shoot me a Discord DM @ huntinator7
               </h2>
               <router-link class="button primary" to="/"
                 >Return Home</router-link
@@ -59,7 +59,7 @@
           </swiper-slide>
         </swiper>
         <button v-if="!isMobile" class="swipe-nav right" @click="nextPage">
-          >
+          &gt;
         </button>
       </div>
       <RouterLink class="button alt" style="margin-top: 1rem" to="/unwrapped">
