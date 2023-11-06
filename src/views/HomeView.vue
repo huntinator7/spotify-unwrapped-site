@@ -2,7 +2,7 @@
   <h1>Welcome to Unwrapped!</h1>
   <main class="content">
     <span class="large"
-      >Unwrapped July is here! Make sure to go
+      >Unwrapped October is here! Make sure to go
       <router-link to="/unwrapped">check it out!</router-link></span
     >
     <Login />
