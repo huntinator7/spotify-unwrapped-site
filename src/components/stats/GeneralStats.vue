@@ -53,6 +53,12 @@
           </div>
         </div>
       </template>
+      <button
+        class="button alt"
+        @click="() => mostListenedStore.getMostListenedSongs()"
+      >
+        See More
+      </button>
     </div>
     <div class="general-stat">
       <h2>Most Played Albums</h2>
@@ -80,6 +86,12 @@
           </div>
         </div>
       </template>
+      <button
+        class="button alt"
+        @click="() => mostListenedStore.getMostListenedAlbums()"
+      >
+        See More
+      </button>
     </div>
     <div class="general-stat">
       <h2>Most Played Artists</h2>
@@ -105,6 +117,12 @@
           </div>
         </div>
       </template>
+      <button
+        class="button alt"
+        @click="() => mostListenedStore.getMostListenedArtists()"
+      >
+        See More
+      </button>
     </div>
   </template>
 </template>

@@ -30,11 +30,7 @@ export const useMostListenedStore = defineStore("mostListened", () => {
   }
 
   async function getMostListenedSongs() {
-    if (mostListenedSongs.value) {
-      return;
-    } else {
-      getMostListenedSongsInternal();
-    }
+    getMostListenedSongsInternal();
   }
 
   async function refreshMostListenedSongs() {
@@ -91,11 +87,7 @@ export const useMostListenedStore = defineStore("mostListened", () => {
   }
 
   async function getMostListenedAlbums() {
-    if (mostListenedAlbums.value) {
-      return;
-    } else {
-      getMostListenedAlbumsInternal();
-    }
+    getMostListenedAlbumsInternal();
   }
 
   async function getAlbumPlays(albumId: string) {
@@ -148,11 +140,7 @@ export const useMostListenedStore = defineStore("mostListened", () => {
   }
 
   async function getMostListenedArtists() {
-    if (mostListenedArtists.value) {
-      return;
-    } else {
-      getMostListenedArtistsInternal();
-    }
+    getMostListenedArtistsInternal();
   }
 
   async function getArtistPlays(artistId: string) {
