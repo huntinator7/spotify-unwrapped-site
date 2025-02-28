@@ -50,7 +50,6 @@
         <div v-if="showPlays[song.id]" class="plays">
           <div v-for="play in song.plays" :key="play.id" style="display: flex">
             <span>{{ formatPlayedAt(play.played_at) }}</span>
-            <span>{{ ` - ${play.__id}` }}</span>
             <button
               class="button alt small"
               @click="showDeletePlay = play.__id!"
@@ -143,7 +142,7 @@
 <script setup lang="ts">
 import { useMostListenedStore } from "@/stores/mostListened";
 import { useUserStore } from "@/stores/user";
-import { deleteDoc, doc } from "firebase/firestore";
+import { arrayRemove, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { storeToRefs } from "pinia";
 import { onMounted, ref, type Ref, computed } from "vue";
 import { useFirestore } from "vuefire";
@@ -213,7 +212,13 @@ const db = useFirestore();
 const showDeletePlay = ref<string | null>(null);
 async function deletePlay(id: string, songId: string) {
   console.log("DeleteDoc", "User", user?.value?.uid || "", "Plays", id);
-  await deleteDoc(doc(db, "User", user?.value?.uid || "", "Plays", id));
+  const playRef = doc(db, "User", user?.value?.uid || "", "Plays", id);
+  await deleteDoc(playRef);
+  const songListenRef = doc(db, "User", user?.value?.uid || "", "UserSongs");
+
+  await updateDoc(songListenRef, {
+    listens: arrayRemove(playRef),
+  });
   handleSongPlays(songId, false);
 }
 </script>
