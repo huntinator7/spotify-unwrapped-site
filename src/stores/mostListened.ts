@@ -16,7 +16,7 @@ export const useMostListenedStore = defineStore("mostListened", () => {
       mostListenedSongs.value = null;
       return;
     }
-    mostListenedSongs.value = newVal.map((v) => v.data());
+    mostListenedSongs.value = newVal.map((v) => ({ ...v.data(), __id: v.id }));
   });
 
   async function getMostListenedSongsInternal() {
@@ -46,14 +46,22 @@ export const useMostListenedStore = defineStore("mostListened", () => {
     if (!mostListenedSongs.value) return;
     const index = mostListenedSongs.value.findIndex((s) => s.id === songId);
     if (index === -1) return;
+    let length = 20;
     if (mostListenedSongs.value[index].plays) {
-      console.log("already has plays");
-      return;
+      console.log(
+        `already has ${mostListenedSongs.value[index].plays.length} plays`
+      );
+      if (mostListenedSongs.value[index].plays.length % 20 !== 0) {
+        console.log("has all songs, no more");
+        return;
+      }
+      length = mostListenedSongs.value[index].plays.length + 20;
     }
     const song = mostListenedSongs.value[index];
     const plays = await Promise.all(
-      song.listens.slice(0, 20).map(async (l) => {
-        return (await getDoc(cleanRef(l))).data() as PlayItem;
+      song.listens.slice(-length).map(async (l) => {
+        const doc = await getDoc(cleanRef(l));
+        return { ...doc.data(), __id: doc.id } as PlayItem;
       })
     );
     mostListenedSongs.value[index].plays = plays.sort((a, b) =>
@@ -95,7 +103,7 @@ export const useMostListenedStore = defineStore("mostListened", () => {
     const index = mostListenedAlbums.value.findIndex((a) => a.id === albumId);
     if (index === -1) return;
     if (mostListenedAlbums.value[index].plays) {
-      console.log("already has plays");
+      console.log("already has plays album");
       return;
     }
     const album = mostListenedAlbums.value[index];
@@ -148,7 +156,7 @@ export const useMostListenedStore = defineStore("mostListened", () => {
     const index = mostListenedArtists.value.findIndex((a) => a.id === artistId);
     if (index === -1) return;
     if (mostListenedArtists.value[index].plays) {
-      console.log("already has plays");
+      console.log("already has plays artist");
       return;
     }
     const artist = mostListenedArtists.value[index];

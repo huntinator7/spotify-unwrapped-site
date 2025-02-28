@@ -41,16 +41,29 @@
             <button
               class="button alt"
               :disabled="loadingItems[song.id]"
-              @click="toggleSongPlays(song.id)"
+              @click="handleSongPlays(song.id)"
             >
               {{ showPlays[song.id] ? "Hide Plays" : "View Plays" }}
             </button>
           </div>
         </div>
         <div v-if="showPlays[song.id]" class="plays">
-          <div v-for="play in song.plays" :key="play.id">
-            {{ formatPlayedAt(play.played_at) }}
+          <div v-for="play in song.plays" :key="play.id" style="display: flex">
+            <span>{{ formatPlayedAt(play.played_at) }}</span>
+            <span>{{ ` - ${play.__id}` }}</span>
+            <button
+              class="button alt small"
+              @click="showDeletePlay = play.__id!"
+            >
+              x
+            </button>
+            <div v-if="showDeletePlay === play.__id">
+              <span>Are you sure you want to delete this?</span>
+              <button @click="showDeletePlay = null">Cancel</button>
+              <button @click="deletePlay(play.__id!, song.id)">Delete</button>
+            </div>
           </div>
+          <button @click="handleSongPlays(song.id, false)">Show More</button>
         </div>
       </template>
       <button
@@ -130,10 +143,13 @@
 <script setup lang="ts">
 import { useMostListenedStore } from "@/stores/mostListened";
 import { useUserStore } from "@/stores/user";
+import { deleteDoc, doc } from "firebase/firestore";
 import { storeToRefs } from "pinia";
 import { onMounted, ref, type Ref, computed } from "vue";
+import { useFirestore } from "vuefire";
 const userStore = useUserStore();
 const {
+  user,
   userInfo,
   uniquePlayCount,
   uniqueSongCount,
@@ -165,16 +181,21 @@ const avgMinutesPerDay = computed(() => {
   return Math.round(listenMins / daysSinceCreation);
 });
 
-const togglePlays = async (id: string, call: (id: string) => Promise<void>) => {
-  console.log("here");
+const togglePlays = async (
+  id: string,
+  call: (id: string) => Promise<void>,
+  toggle = true
+) => {
   loadingItems.value[id] = true;
   await call(id);
-  showPlays.value[id] = !showPlays.value[id];
+  if (toggle) {
+    showPlays.value[id] = !showPlays.value[id];
+  }
   loadingItems.value[id] = false;
 };
 
-const toggleSongPlays = (songId: string) =>
-  togglePlays(songId, mostListenedStore.getSongPlays);
+const handleSongPlays = (songId: string, toggle = true) =>
+  togglePlays(songId, mostListenedStore.getSongPlays, toggle);
 
 const toggleAlbumPlays = (albumId: string) =>
   togglePlays(albumId, mostListenedStore.getAlbumPlays);
@@ -186,6 +207,14 @@ function formatPlayedAt(playedAt: string) {
   return `${new Date(playedAt).toLocaleDateString()} ${new Date(
     playedAt
   ).toLocaleTimeString()}`;
+}
+
+const db = useFirestore();
+const showDeletePlay = ref<string | null>(null);
+async function deletePlay(id: string, songId: string) {
+  console.log("DeleteDoc", "User", user?.value?.uid || "", "Plays", id);
+  await deleteDoc(doc(db, "User", user?.value?.uid || "", "Plays", id));
+  handleSongPlays(songId, false);
 }
 </script>
 

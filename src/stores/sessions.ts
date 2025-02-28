@@ -65,7 +65,7 @@ export const useSessionStore = defineStore("sessions", () => {
       return;
     }
     if (sessionsList.value[index].plays) {
-      console.log("already has plays");
+      console.log("already has plays session");
       return;
     }
     const plays = await Promise.all(

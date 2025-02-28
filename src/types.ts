@@ -4,6 +4,7 @@ import type { User as FirebaseUser } from "firebase/auth";
 type ValueOf<T> = T[keyof T];
 
 export type PlayItem = {
+  __id?: string;
   id: string;
   name: string;
   artists: { name: string; id: string }[];
