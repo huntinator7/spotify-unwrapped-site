@@ -47,15 +47,15 @@ export const useMostListenedStore = defineStore("mostListened", () => {
     const index = mostListenedSongs.value.findIndex((s) => s.id === songId);
     if (index === -1) return;
     let length = 20;
-    if (mostListenedSongs.value[index].plays) {
+    if (mostListenedSongs.value?.[index]?.plays) {
       console.log(
-        `already has ${mostListenedSongs.value[index].plays.length} plays`
+        `already has ${mostListenedSongs.value?.[index]?.plays?.length} plays`
       );
-      if (mostListenedSongs.value[index].plays.length % 20 !== 0) {
+      if (mostListenedSongs.value?.[index]?.plays?.length % 20 !== 0) {
         console.log("has all songs, no more");
         return;
       }
-      length = mostListenedSongs.value[index].plays.length + 20;
+      length = mostListenedSongs.value?.[index]?.plays?.length + 20;
     }
     const song = mostListenedSongs.value[index];
     const plays = await Promise.all(
